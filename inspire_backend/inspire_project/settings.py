@@ -2,7 +2,7 @@
 Django settings for inspire_project.
 Inspire 2026 - Intra-Department Tech Leadership Fest Backend
 St. Claret College · Department of Computer Science
-Production Ready for Railway.app & Cloud Hosting
+Production Ready for Render.com (100% Free Cloud Web Service)
 """
 
 from pathlib import Path
@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-inspire2026-stclaretcollege-fest-key-92847192')
 
-# In production on Railway, DEBUG is False unless explicitly overridden
+# DEBUG is True locally, False in production when DJANGO_DEBUG=False
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() in ('true', '1')
 
 ALLOWED_HOSTS = ['*']
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # Top priority for CORS
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # High performance static file serving
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # High-speed static file serving on Render
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -106,10 +106,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CSRF Trusted Origins for Railway & local testing
+# CSRF Trusted Origins for Render & local development
 CSRF_TRUSTED_ORIGINS = [
-    'https://*.railway.app',
-    'https://*.up.railway.app',
+    'https://*.onrender.com',
+    'https://*.render.com',
     'http://127.0.0.1',
     'http://localhost',
     'http://127.0.0.1:8000',

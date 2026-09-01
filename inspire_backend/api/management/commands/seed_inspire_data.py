@@ -22,56 +22,46 @@ class Command(BaseCommand):
             {"squad_id": "team_11", "num": "Team 11", "name": "CHRONO CREW", "captain": "Rishika D", "vice_captain": "Manya R", "badge_color": "#F97316"}
         ]
 
-        created_squads = 0
         for sq in squads_data:
-            obj, created = Squad.objects.get_or_create(
+            Squad.objects.update_or_create(
                 squad_id=sq["squad_id"],
                 defaults={
                     "num": sq["num"],
                     "name": sq["name"],
                     "captain": sq["captain"],
                     "vice_captain": sq["vice_captain"],
-                    "points": 0,
                     "badge_color": sq["badge_color"]
                 }
             )
-            if created:
-                created_squads += 1
-            else:
-                # Ensure baseline points remain 0
-                obj.name = sq["name"]
-                obj.captain = sq["captain"]
-                obj.vice_captain = sq["vice_captain"]
-                obj.save()
 
-        self.stdout.write(self.style.SUCCESS("[OK] Squads ready: 11 Squads verified (0 baseline points)"))
+        self.stdout.write(self.style.SUCCESS("[OK] Squads ready: 11 Squads verified"))
 
-        # 14 Competition Tracks
+        # 14 Official Competition Tracks
         events_data = [
-            {"event_id": "it-quiz", "name": "IT Quiz", "category": "Technical", "format_type": "Team of 2", "team_size": 2, "venue": "Seminar Hall A", "time": "10:30 AM – 11:30 AM"},
-            {"event_id": "it-manager", "name": "IT Manager", "category": "Management", "format_type": "Individual", "team_size": 1, "venue": "Board Room 1", "time": "11:00 AM – 01:00 PM"},
-            {"event_id": "debate", "name": "Debate", "category": "Communication", "format_type": "Team of 4", "team_size": 4, "venue": "Audio-Visual Hall", "time": "11:30 AM – 01:00 PM"},
-            {"event_id": "startup-pitch", "name": "Startup Pitch", "category": "Entrepreneurship", "format_type": "Team of 4", "team_size": 4, "venue": "Conference Room", "time": "01:30 PM – 03:00 PM"},
-            {"event_id": "photography", "name": "Photography", "category": "Creative", "format_type": "Individual", "team_size": 1, "venue": "Campus Wide / Online Drive", "time": "Full Day Submission"},
-            {"event_id": "graphical-designing", "name": "Graphical Designing", "category": "Design", "format_type": "Individual", "team_size": 1, "venue": "Multimedia Lab", "time": "11:30 AM – 01:00 PM"},
-            {"event_id": "coding-debugging", "name": "Coding and Debugging", "category": "Technical", "format_type": "Team of 2", "team_size": 2, "venue": "Computer Lab 1", "time": "10:30 AM – 12:00 PM"},
-            {"event_id": "ipl-auction", "name": "IPL Auction", "category": "Strategy", "format_type": "Team of 4", "team_size": 4, "venue": "Seminar Hall B", "time": "01:30 PM – 03:30 PM"},
-            {"event_id": "logo-designing", "name": "Logo Designing", "category": "Design", "format_type": "Individual", "team_size": 1, "venue": "Computer Lab 2", "time": "11:30 AM – 01:00 PM"},
-            {"event_id": "treasure-hunt", "name": "Treasure Hunt", "category": "Adventure", "format_type": "Team of 4", "team_size": 4, "venue": "College Quadrangle", "time": "02:00 PM – 03:30 PM"},
-            {"event_id": "decode-evidence", "name": "Decode the Evidence", "category": "Analytical", "format_type": "Team of 3", "team_size": 3, "venue": "Room 204", "time": "11:30 AM – 01:00 PM"},
-            {"event_id": "bgmi", "name": "BGMI", "category": "Esports", "format_type": "Team of 4", "team_size": 4, "venue": "Gaming Arena / Lab 3", "time": "01:30 PM – 03:30 PM"},
-            {"event_id": "free-fire", "name": "Free Fire", "category": "Esports", "format_type": "Team of 4", "team_size": 4, "venue": "Gaming Arena / Lab 3", "time": "01:30 PM – 03:30 PM"},
-            {"event_id": "typing-marathon", "name": "Typing Marathon", "category": "Speed", "format_type": "Individual", "team_size": 1, "venue": "Computer Lab 4", "time": "10:30 AM – 11:30 AM"}
+            {"event_id": "it-quiz", "name": "IT Quiz", "category": "Technical", "format_type": "Team of 2", "team_size": 2, "venue": "Mother Teresa Conference Hall – Admin Block", "time": "10:30 AM – 11:15 AM"},
+            {"event_id": "it-manager", "name": "IT Manager", "category": "Corporate", "format_type": "Individual", "team_size": 1, "venue": "APJ Abdul Kalam Auditorium – Admin Block", "time": "10:30 AM – 02:00 PM"},
+            {"event_id": "coding-debugging", "name": "Coding and Debugging", "category": "Technical", "format_type": "Team of 2", "team_size": 2, "venue": "III Floor LAB – Annex Block", "time": "11:00 AM – 12:15 PM"},
+            {"event_id": "decode-evidence", "name": "Decode the Evidence", "category": "Technical", "format_type": "Team of 3", "team_size": 3, "venue": "Room No 117 – Annex Block", "time": "11:15 AM – 12:15 PM"},
+            {"event_id": "startup-pitch", "name": "Startup Pitch", "category": "Corporate", "format_type": "Team of 4", "team_size": 4, "venue": "Room No 218 – Annex Block", "time": "01:15 PM – 02:30 PM"},
+            {"event_id": "treasure-hunt", "name": "Treasure Hunt", "category": "General", "format_type": "Team of 4", "team_size": 4, "venue": "Room No 116 – Annex Block", "time": "12:50 PM – 01:50 PM"},
+            {"event_id": "photography", "name": "Photography", "category": "Creative", "format_type": "Individual", "team_size": 1, "venue": "Information will be given through WhatsApp group", "time": "Information will be given through WhatsApp group"},
+            {"event_id": "logo-designing", "name": "Logo Designing", "category": "Creative", "format_type": "Individual", "team_size": 1, "venue": "Information will be given through WhatsApp group", "time": "Information will be given through WhatsApp group"},
+            {"event_id": "graphical-designing", "name": "Graphical Designing", "category": "Creative", "format_type": "Individual", "team_size": 1, "venue": "Information will be given through WhatsApp group", "time": "Information will be given through WhatsApp group"},
+            {"event_id": "ipl-auction", "name": "IPL Auction", "category": "General", "format_type": "Team of 4", "team_size": 4, "venue": "Seminar Hall – Annex Block", "time": "10:30 AM – 11:15 AM"},
+            {"event_id": "typing-marathon", "name": "Typing Marathon", "category": "Technical", "format_type": "Individual", "team_size": 1, "venue": "II Floor Lab – Annex Block", "time": "11:15 AM – 12:15 PM"},
+            {"event_id": "free-fire", "name": "Free Fire", "category": "Gaming", "format_type": "Team of 4", "team_size": 4, "venue": "Room No 216 – Annex Block", "time": "12:45 PM – 02:00 PM"},
+            {"event_id": "bgmi", "name": "BGMI", "category": "Gaming", "format_type": "Team of 4", "team_size": 4, "venue": "Room No 217 – Annex Block", "time": "10:30 AM – 12:00 PM"},
+            {"event_id": "fashion-walk", "name": "Fashion Walk", "category": "Creative", "format_type": "Team of 4", "team_size": 4, "venue": "APJ Abdul Kalam Auditorium – Admin Block", "time": "02:45 PM – 03:30 PM"}
         ]
 
-        created_events = 0
+        # Clean old tracks if needed
+        EventTrack.objects.exclude(event_id__in=[e["event_id"] for e in events_data]).delete()
+
         for ev in events_data:
-            obj, created = EventTrack.objects.get_or_create(
+            EventTrack.objects.update_or_create(
                 event_id=ev["event_id"],
                 defaults=ev
             )
-            if created:
-                created_events += 1
 
-        self.stdout.write(self.style.SUCCESS("[OK] Competition tracks ready: 14 Events verified"))
+        self.stdout.write(self.style.SUCCESS("[OK] Competition tracks ready: 14 Events verified with official venues & timings"))
         self.stdout.write(self.style.SUCCESS("[SUCCESS] Inspire 2026 Database Seeding Complete!"))

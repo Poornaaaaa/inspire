@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: inspire-backend
+    runtime: python
+    rootDir: inspire_backend
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn inspire_project.wsgi:application"
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.8
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
