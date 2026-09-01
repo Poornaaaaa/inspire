@@ -92,6 +92,7 @@
       -webkit-font-smoothing: antialiased;
       position: relative;
       touch-action: pan-y pinch-zoom;
+      padding-top: 78px;
     }
 
     section,
@@ -113,7 +114,7 @@
     .venue-section,
     .contact-section,
     .guidelines-section {
-      scroll-margin-top: 85px;
+      scroll-margin-top: 90px;
     }
 
     ::selection {
@@ -148,10 +149,143 @@
         linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
       background-size: 100% 100%, 70px 70px, 70px 70px;
-      backdrop-filter: blur(4.5px);
-      pointer-events: none;
       z-index: -1;
-      overflow: hidden !important;
+      pointer-events: none;
+    }
+
+    /* Section Utilities */
+    .section {
+      padding: 96px 0;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 64px;
+    }
+
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 99px;
+      color: var(--corporate-emerald);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+      backdrop-filter: blur(8px);
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 3.8vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+      margin-bottom: 16px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* Floating Scroll Indicator */
+    .scroll-indicator-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-top: 40px;
+    }
+
+    .scroll-mouse {
+      width: 26px;
+      height: 42px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      position: relative;
+    }
+
+    .scroll-wheel {
+      width: 4px;
+      height: 8px;
+      background: var(--corporate-emerald);
+      border-radius: 2px;
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: scrollWheel 2s infinite ease-in-out;
+    }
+
+    @keyframes scrollWheel {
+      0% {
+        opacity: 1;
+        top: 6px;
+      }
+
+      100% {
+        opacity: 0;
+        top: 24px;
+      }
+    }
+
+    .scroll-text {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-faint);
+    }
+
+    /* Scroll Reveal Animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 {
+      transition-delay: 0.12s;
+    }
+
+    .reveal-delay-2 {
+      transition-delay: 0.24s;
+    }
+
+    .reveal-delay-3 {
+      transition-delay: 0.36s;
+    }
+
+    /* Fixed Top Header Navigation Panel */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 1100;
+      background: rgba(5, 8, 17, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: all 0.3s ease;
     }
 
     /* =============================================================
@@ -5177,12 +5311,17 @@
         </button>
       </div>
 
-      <!-- Mobile Hamburger Toggle Button -->
-      <button type="button" class="mobile-menu-btn" id="mobileNavToggleBtn" aria-label="Toggle navigation menu" onclick="toggleMobileNavDrawer()">
-        <span class="hamburger-bar"></span>
-        <span class="hamburger-bar"></span>
-        <span class="hamburger-bar"></span>
-      </button>
+      <!-- Mobile Quick Actions & Hamburger Toggle -->
+      <div class="mobile-header-actions" style="display: none; align-items: center; gap: 8px;">
+        <button type="button" class="btn btn-primary btn-sm" onclick="openRegisterModal()" style="padding: 7px 13px; font-size: 13px; font-weight: 700; border-radius: 10px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);">
+          <i class="fa-solid fa-ticket"></i> Register
+        </button>
+        <button type="button" class="mobile-menu-btn" id="mobileNavToggleBtn" aria-label="Toggle navigation menu" onclick="toggleMobileNavDrawer()">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -5192,7 +5331,7 @@
   <div class="mobile-drawer-backdrop" id="mobileNavDrawerBackdrop" onclick="closeMobileNavDrawer()"></div>
   <aside class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Mobile Navigation">
     <div class="mobile-drawer-header">
-      <a href="#hero" class="brand" onclick="handleMobileNavClick('#hero')">
+      <a href="#hero" class="brand" onclick="handleMobileNavClick(event, '#hero')">
         <div class="brand-logo" style="width: 36px; height: 36px; font-size: 16px;">.in</div>
         <div class="brand-text">
           <span class="brand-title" style="font-size: 19px;">Inspire 2026</span>
@@ -5205,15 +5344,15 @@
 
     <div class="mobile-drawer-content">
       <ul class="mobile-nav-links">
-        <li><a href="#hero" class="mobile-nav-link" onclick="handleMobileNavClick('#hero')"><i class="fa-solid fa-house"></i> <span>Home</span></a></li>
-        <li><a href="#about" class="mobile-nav-link" onclick="handleMobileNavClick('#about')"><i class="fa-solid fa-circle-info"></i> <span>About Inspire</span></a></li>
-        <li><a href="#leaderboard" class="mobile-nav-link" onclick="handleMobileNavClick('#leaderboard')"><i class="fa-solid fa-trophy" style="color: #F59E0B;"></i> <span>Live Leaderboard</span> <span class="mobile-link-badge">Live</span></a></li>
-        <li><a href="#teams" class="mobile-nav-link" onclick="handleMobileNavClick('#teams')"><i class="fa-solid fa-users" style="color: #6366F1;"></i> <span>11 Competing Squads</span></a></li>
-        <li><a href="#events" class="mobile-nav-link" onclick="handleMobileNavClick('#events')"><i class="fa-solid fa-cubes" style="color: #10B981;"></i> <span>14 Competitions</span></a></li>
-        <li><a href="#schedule" class="mobile-nav-link" onclick="handleMobileNavClick('#schedule')"><i class="fa-solid fa-calendar-day" style="color: #06B6D4;"></i> <span>Event Schedule</span></a></li>
-        <li><a href="#venue" class="mobile-nav-link" onclick="handleMobileNavClick('#venue')"><i class="fa-solid fa-location-dot" style="color: #EC4899;"></i> <span>Venues &amp; Map</span></a></li>
-        <li><a href="#guidelines" class="mobile-nav-link" onclick="handleMobileNavClick('#guidelines')"><i class="fa-solid fa-scroll" style="color: #FBBF24;"></i> <span>Fest Guidelines</span></a></li>
-        <li><a href="#contact" class="mobile-nav-link" onclick="handleMobileNavClick('#contact')"><i class="fa-solid fa-address-book" style="color: #A855F7;"></i> <span>Contact Desk</span></a></li>
+        <li><a href="#hero" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#hero')"><i class="fa-solid fa-house"></i> <span>Home</span></a></li>
+        <li><a href="#about" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#about')"><i class="fa-solid fa-circle-info"></i> <span>About Inspire</span></a></li>
+        <li><a href="#leaderboard" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#leaderboard')"><i class="fa-solid fa-trophy" style="color: #F59E0B;"></i> <span>Live Leaderboard</span> <span class="mobile-link-badge">Live</span></a></li>
+        <li><a href="#teams" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#teams')"><i class="fa-solid fa-users" style="color: #6366F1;"></i> <span>11 Competing Squads</span></a></li>
+        <li><a href="#events" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#events')"><i class="fa-solid fa-cubes" style="color: #10B981;"></i> <span>14 Competitions</span></a></li>
+        <li><a href="#schedule" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#schedule')"><i class="fa-solid fa-calendar-day" style="color: #06B6D4;"></i> <span>Event Schedule</span></a></li>
+        <li><a href="#venue" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#venue')"><i class="fa-solid fa-location-dot" style="color: #EC4899;"></i> <span>Venues &amp; Map</span></a></li>
+        <li><a href="#guidelines" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#guidelines')"><i class="fa-solid fa-scroll" style="color: #FBBF24;"></i> <span>Fest Guidelines</span></a></li>
+        <li><a href="#contact" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#contact')"><i class="fa-solid fa-address-book" style="color: #A855F7;"></i> <span>Contact Desk</span></a></li>
       </ul>
 
       <div class="mobile-drawer-actions">
@@ -9313,12 +9452,33 @@
       }
     }
 
-    function handleMobileNavClick(targetHash) {
-      closeMobileNavDrawer();
-      const el = document.querySelector(targetHash);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+    function smoothScrollToSection(targetHash) {
+      if (!targetHash) return;
+      let targetEl = null;
+      if (typeof targetHash === 'string' && targetHash.startsWith('#')) {
+        targetEl = document.querySelector(targetHash);
       }
+      if (targetEl) {
+        const headerEl = document.querySelector('.header');
+        const headerOffset = headerEl ? (headerEl.offsetHeight + 14) : 84;
+        const elementPosition = targetEl.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({
+          top: Math.max(0, offsetPosition),
+          behavior: 'smooth'
+        });
+      }
+    }
+
+    function handleMobileNavClick(e, targetHash) {
+      if (e) {
+        if (e.preventDefault) e.preventDefault();
+        if (e.stopPropagation) e.stopPropagation();
+      }
+      closeMobileNavDrawer();
+      setTimeout(() => {
+        smoothScrollToSection(targetHash);
+      }, 100);
     }
 
     // -------------------------------------------------------------
@@ -9329,12 +9489,28 @@
     }
 
     function handleBottomNavClick(e, targetHash) {
-      e.preventDefault();
-      const el = document.querySelector(targetHash);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+      if (e) {
+        if (e.preventDefault) e.preventDefault();
+        if (e.stopPropagation) e.stopPropagation();
       }
+      smoothScrollToSection(targetHash);
     }
+
+    // Attach smooth scroll to all desktop and in-page anchor links
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href && href.length > 1 && href.startsWith('#')) {
+            const target = document.querySelector(href);
+            if (target) {
+              e.preventDefault();
+              smoothScrollToSection(href);
+            }
+          }
+        });
+      });
+    });
 
     // Track active section for bottom navigation bar and toggle back-to-top button
     window.addEventListener('scroll', () => {
