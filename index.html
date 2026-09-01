@@ -92,7 +92,7 @@
       -webkit-font-smoothing: antialiased;
       position: relative;
       touch-action: pan-y pinch-zoom;
-      padding-top: 78px;
+      padding-top: 68px;
     }
 
     section,
@@ -114,7 +114,7 @@
     .venue-section,
     .contact-section,
     .guidelines-section {
-      scroll-margin-top: 90px;
+      scroll-margin-top: 76px;
     }
 
     ::selection {
@@ -273,75 +273,7 @@
       transition-delay: 0.36s;
     }
 
-    /* Fixed Top Header Navigation Panel */
-    .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      z-index: 1100;
-      background: rgba(5, 8, 17, 0.94);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border-subtle);
-      transition: all 0.3s ease;
-    }
-
-    /* Mobile Horizontal Quick Navigation Strip (< 1024px) */
-    .mobile-quick-nav-strip {
-      display: none;
-      width: 100%;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(4, 7, 14, 0.96);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      padding: 6px 12px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-
-    .mobile-quick-nav-strip::-webkit-scrollbar {
-      display: none;
-    }
-
-    .mobile-quick-nav-scroll {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      width: max-content;
-    }
-
-    .quick-nav-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 13px;
-      border-radius: 99px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #CBD5E1;
-      font-size: 12px;
-      font-weight: 600;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: all 0.2s ease;
-      cursor: pointer;
-    }
-
-    .quick-nav-pill:active,
-    .quick-nav-pill.active {
-      background: rgba(16, 185, 129, 0.18);
-      border-color: rgba(16, 185, 129, 0.45);
-      color: #34D399;
-    }
-
-    .quick-nav-btn-highlight {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(6, 182, 212, 0.25));
-      border-color: rgba(99, 102, 241, 0.45);
-      color: #A5B4FC;
-    }
+    /* Header styling handled in main section */
 
     /* =============================================================
        CURSOR DOT TRAIL COMPONENT (Framer-Engineered)
@@ -652,13 +584,17 @@
       transition-delay: 0.36s;
     }
 
-    /* Header */
+    /* Fixed Top Navigation Panel */
     .header {
-      position: sticky;
+      position: fixed;
       top: 0;
-      z-index: 1000;
-      background: rgba(5, 8, 17, 0.84);
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 1100;
+      background: rgba(5, 8, 17, 0.94);
       backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border-subtle);
       transition: all 0.3s ease;
     }
@@ -667,7 +603,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 78px;
+      height: 68px;
     }
 
     .brand {
@@ -3382,17 +3318,17 @@
         display: flex !important;
       }
 
-      .mobile-quick-nav-strip {
-        display: block !important;
+      .mobile-bottom-nav {
+        display: none !important;
       }
 
-      .mobile-bottom-nav {
-        display: flex !important;
+      .nav-container {
+        height: 60px !important;
       }
 
       body {
-        padding-top: 114px !important;
-        padding-bottom: 74px !important;
+        padding-top: 60px !important;
+        padding-bottom: 0 !important;
       }
 
       section,
@@ -3405,7 +3341,7 @@
       .venue-section,
       .contact-section,
       .guidelines-section {
-        scroll-margin-top: 122px !important;
+        scroll-margin-top: 72px !important;
       }
 
       .tilt-card,
@@ -5408,22 +5344,6 @@
         </button>
       </div>
     </div>
-
-    <!-- Mobile Horizontal Touch-Scrollable Quick Navigation Pills Bar -->
-    <div class="mobile-quick-nav-strip" id="mobileQuickNavStrip">
-      <div class="mobile-quick-nav-scroll">
-        <a href="#about" class="quick-nav-pill" onclick="handleQuickNavClick(event, '#about')"><i class="fa-solid fa-circle-info"></i> About</a>
-        <a href="#leaderboard" class="quick-nav-pill" onclick="handleQuickNavClick(event, '#leaderboard')"><i class="fa-solid fa-trophy" style="color: #F59E0B;"></i> Scores</a>
-        <a href="#teams" class="quick-nav-pill" onclick="handleQuickNavClick(event, '#teams')"><i class="fa-solid fa-users" style="color: #6366F1;"></i> Squads</a>
-        <a href="#events" class="quick-nav-pill" onclick="handleQuickNavClick(event, '#events')"><i class="fa-solid fa-cubes" style="color: #10B981;"></i> Events</a>
-        <a href="#schedule" class="quick-nav-pill" onclick="handleQuickNavClick(event, '#schedule')"><i class="fa-solid fa-calendar-day" style="color: #06B6D4;"></i> Schedule</a>
-        <a href="#venue" class="quick-nav-pill" onclick="handleQuickNavClick(event, '#venue')"><i class="fa-solid fa-location-dot" style="color: #EC4899;"></i> Venues</a>
-        <a href="#guidelines" class="quick-nav-pill" onclick="handleQuickNavClick(event, '#guidelines')"><i class="fa-solid fa-scroll" style="color: #FBBF24;"></i> Guidelines</a>
-        <a href="#contact" class="quick-nav-pill" onclick="handleQuickNavClick(event, '#contact')"><i class="fa-solid fa-address-book" style="color: #A855F7;"></i> Contact</a>
-        <button type="button" class="quick-nav-pill quick-nav-btn-highlight" onclick="openRegisterModal()"><i class="fa-solid fa-ticket"></i> Register</button>
-        <button type="button" class="quick-nav-pill" onclick="openAdminAuthModal()" style="border-color: rgba(99, 102, 241, 0.4); color: #A5B4FC;"><i class="fa-solid fa-shield-halved"></i> Admin</button>
-      </div>
-    </div>
   </header>
 
   <!-- ==========================================
@@ -7406,31 +7326,7 @@
     </div>
   </div>
 
-  <!-- ==========================================
-       FLOATING MOBILE BOTTOM NAVIGATION BAR (< 768px)
-       ========================================== -->
-  <nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Mobile Navigation Bar">
-    <a href="#hero" class="bottom-nav-item active" id="bnav-hero" onclick="handleBottomNavClick(event, '#hero')">
-      <i class="fa-solid fa-house"></i>
-      <span>Home</span>
-    </a>
-    <a href="#leaderboard" class="bottom-nav-item" id="bnav-leaderboard" onclick="handleBottomNavClick(event, '#leaderboard')">
-      <i class="fa-solid fa-trophy"></i>
-      <span>Scores</span>
-    </a>
-    <a href="#teams" class="bottom-nav-item" id="bnav-teams" onclick="handleBottomNavClick(event, '#teams')">
-      <i class="fa-solid fa-users"></i>
-      <span>Squads</span>
-    </a>
-    <a href="#events" class="bottom-nav-item" id="bnav-events" onclick="handleBottomNavClick(event, '#events')">
-      <i class="fa-solid fa-cubes"></i>
-      <span>Events</span>
-    </a>
-    <button type="button" class="bottom-nav-item bottom-nav-btn-highlight" onclick="openRegisterModal()" aria-label="Open Registration Form">
-      <i class="fa-solid fa-ticket"></i>
-      <span>Register</span>
-    </button>
-  </nav>
+
 
   <!-- ==========================================
        FLOATING "BACK TO TOP" BUTTON
@@ -9583,28 +9479,10 @@
     }
 
     // -------------------------------------------------------------
-    // FLOATING QUICK BOTTOM BAR & BACK TO TOP CONTROLLERS
+    // FLOATING "BACK TO TOP" CONTROLLER & SCROLL ACTIVE TRACKER
     // -------------------------------------------------------------
     function scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function handleBottomNavClick(e, targetHash) {
-      if (e) {
-        if (e.preventDefault) e.preventDefault();
-        if (e.stopPropagation) e.stopPropagation();
-      }
-      smoothScrollToSection(targetHash);
-    }
-
-    function handleQuickNavClick(e, targetHash) {
-      if (e) {
-        if (e.preventDefault) e.preventDefault();
-        if (e.stopPropagation) e.stopPropagation();
-      }
-      smoothScrollToSection(targetHash);
-      document.querySelectorAll('.quick-nav-pill').forEach(el => el.classList.remove('active'));
-      if (e && e.currentTarget) e.currentTarget.classList.add('active');
     }
 
     // Attach smooth scroll to all desktop and in-page anchor links
@@ -9623,7 +9501,7 @@
       });
     });
 
-    // Track active section for bottom navigation bar, quick pills, and toggle back-to-top button
+    // Track active section for navbar highlight and toggle back-to-top button
     window.addEventListener('scroll', () => {
       const scrollY = window.pageYOffset || document.documentElement.scrollTop;
       const backToTopBtn = document.getElementById('floatingBackToTopBtn');
@@ -9635,33 +9513,15 @@
         }
       }
 
-      // Update bottom nav and quick nav active indicators
-      const sections = [
-        { id: 'hero', navId: 'bnav-hero' },
-        { id: 'about', navId: null },
-        { id: 'leaderboard', navId: 'bnav-leaderboard' },
-        { id: 'teams', navId: 'bnav-teams' },
-        { id: 'events', navId: 'bnav-events' },
-        { id: 'schedule', navId: null },
-        { id: 'venue', navId: null },
-        { id: 'guidelines', navId: null },
-        { id: 'contact', navId: null }
-      ];
-
+      // Update desktop navigation active links
+      const sections = ['hero', 'about', 'leaderboard', 'teams', 'events', 'schedule', 'venue', 'guidelines', 'contact'];
       for (let i = sections.length - 1; i >= 0; i--) {
-        const sec = document.getElementById(sections[i].id);
+        const sec = document.getElementById(sections[i]);
         if (sec) {
-          const top = sec.offsetTop - 150;
+          const top = sec.offsetTop - 100;
           if (scrollY >= top) {
-            // Update bottom bar
-            if (sections[i].navId) {
-              document.querySelectorAll('.bottom-nav-item').forEach(el => el.classList.remove('active'));
-              const activeNav = document.getElementById(sections[i].navId);
-              if (activeNav) activeNav.classList.add('active');
-            }
-            // Update quick pill strip
-            document.querySelectorAll('.quick-nav-pill').forEach(el => {
-              if (el.getAttribute('href') === '#' + sections[i].id) {
+            document.querySelectorAll('.nav-link').forEach(el => {
+              if (el.getAttribute('href') === '#' + sections[i]) {
                 el.classList.add('active');
               } else {
                 el.classList.remove('active');
