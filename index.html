@@ -5322,11 +5322,11 @@
       </ul>
 
       <div class="nav-actions">
-        <button type="button" class="btn btn-outline btn-sm magnetic" onclick="openAdminAuthModal()"
-          style="border-color: rgba(99, 102, 241, 0.4); color: #A5B4FC;"
+        <a href="admin.html" class="btn btn-outline btn-sm magnetic"
+          style="border-color: rgba(99, 102, 241, 0.4); color: #A5B4FC; text-decoration: none;"
           title="Admin Portal & 11-Squad Scoreboard Control">
           <i class="fa-solid fa-shield-halved"></i> Admin Portal
-        </button>
+        </a>
         <button type="button" class="btn btn-primary btn-sm magnetic" onclick="openRegisterModal()">
           <i class="fa-solid fa-ticket"></i> Register Now
         </button>
@@ -5370,9 +5370,7 @@
         <li><a href="#leaderboard" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#leaderboard')"><i class="fa-solid fa-trophy" style="color: #F59E0B;"></i> <span>Live Leaderboard</span> <span class="mobile-link-badge">Live</span></a></li>
         <li><a href="#teams" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#teams')"><i class="fa-solid fa-users" style="color: #6366F1;"></i> <span>11 Competing Squads</span></a></li>
         <li><a href="#events" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#events')"><i class="fa-solid fa-cubes" style="color: #10B981;"></i> <span>14 Competitions</span></a></li>
-        <li><a href="#schedule" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#schedule')"><i class="fa-solid fa-calendar-day" style="color: #06B6D4;"></i> <span>Event Schedule</span></a></li>
         <li><a href="#venue" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#venue')"><i class="fa-solid fa-location-dot" style="color: #EC4899;"></i> <span>Venues &amp; Map</span></a></li>
-        <li><a href="#guidelines" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#guidelines')"><i class="fa-solid fa-scroll" style="color: #FBBF24;"></i> <span>Fest Guidelines</span></a></li>
         <li><a href="#contact" class="mobile-nav-link" onclick="handleMobileNavClick(event, '#contact')"><i class="fa-solid fa-address-book" style="color: #A855F7;"></i> <span>Contact Desk</span></a></li>
       </ul>
 
@@ -5380,9 +5378,9 @@
         <button type="button" class="btn btn-primary" onclick="closeMobileNavDrawer(); openRegisterModal();" style="width: 100%; justify-content: center; min-height: 48px; font-weight: 700;">
           <i class="fa-solid fa-ticket"></i> Register Delegate Pass
         </button>
-        <button type="button" class="btn btn-outline" onclick="closeMobileNavDrawer(); openAdminAuthModal();" style="width: 100%; justify-content: center; min-height: 48px; border-color: rgba(99, 102, 241, 0.4); color: #A5B4FC;">
+        <a href="admin.html" class="btn btn-outline" style="width: 100%; justify-content: center; min-height: 48px; border-color: rgba(99, 102, 241, 0.4); color: #A5B4FC; text-decoration: none; display: flex; align-items: center; gap: 8px;">
           <i class="fa-solid fa-shield-halved"></i> Admin Portal
-        </button>
+        </a>
       </div>
     </div>
   </aside>
@@ -9534,20 +9532,10 @@
     }, { passive: true });
 
     // -------------------------------------------------------------
-    // ADMIN AUTHENTICATION SECURITY GATE MODAL
+    // ADMIN PORTAL DIRECT ROUTER
     // -------------------------------------------------------------
     function openAdminAuthModal() {
-      const modal = document.getElementById('adminAuthModal');
-      if (modal) {
-        modal.classList.add('active');
-        document.getElementById('modalAdminPassword').value = '';
-        document.getElementById('modalAdminError').style.display = 'none';
-        pushModalState('adminAuthModal');
-        setTimeout(() => {
-          const pInput = document.getElementById('modalAdminPassword');
-          if (pInput) pInput.focus();
-        }, 120);
-      }
+      window.location.href = "admin.html";
     }
 
     function closeAdminAuthModal(isPopState = false) {
