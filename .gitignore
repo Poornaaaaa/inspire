@@ -1,0 +1,17 @@
+# Python / Django
+__pycache__/
+*.py[cod]
+*$py.class
+staticfiles/
+*.log
+.venv/
+env/
+venv/
+ENV/
+
+# OS / Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+scratch/

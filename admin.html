@@ -1,0 +1,3137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal &middot; Live Team Simulation & Points Manager | Inspire 2026</title>
+  <meta name="description"
+    content="Inspire 2026 Admin Control Console. Real-time 11-team live simulation, event scoring matrix, dynamic leaderboard, and central database management.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,600&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #050811;
+      --bg-dark-subtle: #0B101D;
+      --bg-card: rgba(11, 16, 29, 0.82);
+      --bg-card-hover: rgba(18, 26, 46, 0.95);
+      --bg-glass: rgba(255, 255, 255, 0.035);
+      --border-subtle: rgba(255, 255, 255, 0.1);
+      --border-glow: rgba(16, 185, 129, 0.45);
+      --border-accent: rgba(99, 102, 241, 0.45);
+
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --text-faint: #64748B;
+
+      --corporate-emerald: #10B981;
+      --corporate-emerald-glow: rgba(16, 185, 129, 0.3);
+      --corporate-amber: #F59E0B;
+      --corporate-indigo: #6366F1;
+      --corporate-cyan: #06B6D4;
+      --corporate-purple: #8B5CF6;
+      --corporate-rose: #F43F5E;
+      --corporate-lime: #84CC16;
+
+      --font-serif: 'Fraunces', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+      --font-display: 'Outfit', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+
+      --shadow-card: 0 16px 36px -10px rgba(0, 0, 0, 0.7);
+      --shadow-glow: 0 0 35px -8px rgba(16, 185, 129, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      color-scheme: dark;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Cyber Background Grid */
+    .bg-grid-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 10%, rgba(99, 102, 241, 0.12), transparent 45%),
+        radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.08), transparent 50%),
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 60px 60px, 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* =============================================================
+       LOGIN OVERLAY SCREEN (ID & PASSWORD AUTHENTICATION)
+       ============================================================= */
+    #login-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 17, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+      height: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+
+    #login-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 440px;
+      background: rgba(11, 16, 29, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-xl);
+      padding: 40px 36px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px -10px rgba(16, 185, 129, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #10B981, #06B6D4, #6366F1, #F59E0B);
+    }
+
+    .login-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-family: var(--font-mono);
+      color: #34D399;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .login-title {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .login-desc {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #E2E8F0;
+      margin-bottom: 8px;
+      font-family: var(--font-sans);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      color: var(--text-faint);
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    .form-control {
+      width: 100%;
+      background: rgba(5, 8, 17, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px 12px 42px;
+      color: #FFFFFF;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--corporate-emerald);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+      background: rgba(11, 16, 29, 0.95);
+    }
+
+    .password-toggle-btn {
+      position: absolute;
+      right: 12px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px;
+    }
+
+    .password-toggle-btn:hover {
+      color: #FFFFFF;
+    }
+
+    .login-credentials-hint {
+      margin-top: 18px;
+      padding: 12px;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px dashed rgba(245, 158, 11, 0.35);
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      color: #FCD34D;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .login-credentials-hint code {
+      font-family: var(--font-mono);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #FFF;
+      font-weight: 600;
+    }
+
+    .login-btn {
+      width: 100%;
+      margin-top: 10px;
+      padding: 14px;
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      color: #032219;
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(16, 185, 129, 0.55);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .login-error-msg {
+      display: none;
+      padding: 10px 14px;
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      border-radius: var(--radius-sm);
+      color: #FB7185;
+      font-size: 12.5px;
+      margin-bottom: 18px;
+      text-align: left;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .login-footer-links {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .login-footer-links a {
+      color: var(--corporate-cyan);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .login-footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    /* Shake Animation for Auth Error */
+    @keyframes shakeError {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20%,
+      60% {
+        transform: translateX(-8px);
+      }
+
+      40%,
+      80% {
+        transform: translateX(8px);
+      }
+    }
+
+    .shake {
+      animation: shakeError 0.45s ease-in-out;
+    }
+
+    /* =============================================================
+       MAIN ADMIN PORTAL INTERFACE
+       ============================================================= */
+    .admin-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 24px 28px 80px;
+    }
+
+    /* Top Navigation Header */
+    .admin-header {
+      background: rgba(11, 16, 29, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .admin-logo-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(99, 102, 241, 0.3));
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #10B981;
+      font-size: 20px;
+    }
+
+    .admin-title-group h1 {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 700;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-title-group p {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .admin-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34D399;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 8px #10B981;
+      animation: pulseDot 2s infinite;
+    }
+
+    @keyframes pulseDot {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-display);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      text-decoration: none;
+    }
+
+    .btn-action-outline {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.12);
+      color: var(--text-main);
+    }
+
+    .btn-action-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-action-emerald {
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: #032219;
+      font-weight: 700;
+    }
+
+    .btn-action-emerald:hover {
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-action-danger {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: rgba(244, 63, 94, 0.35);
+      color: #FB7185;
+    }
+
+    .btn-action-danger:hover {
+      background: rgba(244, 63, 94, 0.25);
+      color: #FFF;
+    }
+
+    /* Metric Summary KPI Strip */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .kpi-details h4 {
+      font-size: 11.5px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .kpi-value {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 800;
+      color: #FFFFFF;
+      line-height: 1.1;
+    }
+
+    .kpi-sub {
+      font-size: 11px;
+      color: var(--text-faint);
+      margin-top: 2px;
+    }
+
+    /* =============================================================
+       LIVE SIMULATION CONTROL CONSOLE
+       ============================================================= */
+    .sim-console-card {
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(11, 16, 29, 0.95));
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.8), 0 0 30px -10px rgba(99, 102, 241, 0.2);
+      position: relative;
+    }
+
+    .sim-console-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 30px;
+      right: 30px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #6366F1, #06B6D4, transparent);
+    }
+
+    .sim-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .sim-title-group h2 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 700;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sim-title-group p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .sim-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .sim-btn-play {
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      color: #032219;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 22px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
+      transition: all 0.25s ease;
+    }
+
+    .sim-btn-play:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(16, 185, 129, 0.5);
+    }
+
+    .sim-btn-pause {
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      color: #261601;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 22px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+
+    .sim-btn-step {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #A5B4FC;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sim-btn-step:hover {
+      background: rgba(99, 102, 241, 0.25);
+      color: #FFF;
+    }
+
+    .sim-speed-selector {
+      display: flex;
+      align-items: center;
+      background: rgba(5, 8, 17, 0.8);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 3px;
+      gap: 4px;
+    }
+
+    .speed-pill {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .speed-pill.active {
+      background: var(--corporate-indigo);
+      color: #FFF;
+    }
+
+    /* Live Action Ticker Stream */
+    .sim-ticker-stream {
+      margin-top: 18px;
+      background: rgba(5, 8, 17, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      overflow: hidden;
+    }
+
+    .ticker-lead-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: #38BDF8;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 4px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ticker-content {
+      font-size: 13px;
+      color: #E2E8F0;
+      font-family: var(--font-sans);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ticker-time {
+      color: var(--text-faint);
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+    }
+
+    /* =============================================================
+       GRID LAYOUT: 11 TEAMS LEADERBOARD & EVENT SCORER
+       ============================================================= */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    @media (max-width: 1200px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Section Headers */
+    .content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .content-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .content-title-group h3 {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 700;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .content-title-group p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    /* 11 Teams Live Cards Grid */
+    .teams-live-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .team-row-card {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .team-row-card:hover {
+      background: rgba(22, 33, 58, 0.85);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateX(4px);
+    }
+
+    /* Podium Glowing Ranks */
+    .team-row-card.rank-1 {
+      border-color: rgba(245, 158, 11, 0.6);
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.12), rgba(15, 23, 42, 0.7));
+      box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.2);
+    }
+
+    .team-row-card.rank-2 {
+      border-color: rgba(148, 163, 184, 0.5);
+      background: linear-gradient(90deg, rgba(148, 163, 184, 0.1), rgba(15, 23, 42, 0.7));
+    }
+
+    .team-row-card.rank-3 {
+      border-color: rgba(217, 119, 6, 0.45);
+      background: linear-gradient(90deg, rgba(217, 119, 6, 0.08), rgba(15, 23, 42, 0.7));
+    }
+
+    .team-rank-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(5, 8, 17, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .rank-1 .team-rank-box {
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      color: #1E1200;
+      border: none;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+    }
+
+    .rank-2 .team-rank-box {
+      background: linear-gradient(135deg, #E2E8F0, #94A3B8);
+      color: #0F172A;
+      border: none;
+    }
+
+    .rank-3 .team-rank-box {
+      background: linear-gradient(135deg, #F97316, #C2410C);
+      color: #FFF;
+      border: none;
+    }
+
+    .team-info-box {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .team-avatars-cluster {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .team-avatar-img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid #0F172A;
+      object-fit: cover;
+      background: #1E293B;
+    }
+
+    .team-avatar-img:nth-child(2) {
+      margin-left: -12px;
+    }
+
+    .team-name-tagline h4 {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .team-squad-number {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .team-leaders-caption {
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    /* Score Progress Bar & Number */
+    .team-score-cluster {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      min-width: 170px;
+      justify-content: flex-end;
+    }
+
+    .team-points-counter {
+      text-align: right;
+    }
+
+    .team-points-val {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      color: #FFFFFF;
+      line-height: 1;
+    }
+
+    .team-points-lbl {
+      font-size: 10px;
+      font-family: var(--font-mono);
+      color: var(--text-faint);
+      text-transform: uppercase;
+    }
+
+    .team-score-bar-wrapper {
+      width: 90px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .team-score-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #10B981, #06B6D4);
+      transition: width 0.4s ease;
+    }
+
+    /* Quick Point Action Buttons */
+    .team-quick-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-pt {
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      color: #E2E8F0;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-pt:hover {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: #10B981;
+      color: #34D399;
+      transform: translateY(-1px);
+    }
+
+    .btn-pt-custom {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: rgba(99, 102, 241, 0.35);
+      color: #A5B4FC;
+    }
+
+    .btn-pt-custom:hover {
+      background: rgba(99, 102, 241, 0.3);
+      color: #FFF;
+    }
+
+    /* =============================================================
+       RIGHT COLUMN: QUICK EVENT SCORER MATRIX & ACTIVITY LOG
+       ============================================================= */
+    .sidebar-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .event-scorer-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .scorer-select-group {
+      margin-bottom: 16px;
+    }
+
+    .scorer-select {
+      width: 100%;
+      background: rgba(5, 8, 17, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      color: #FFF;
+      font-family: var(--font-sans);
+      font-size: 13.5px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .scorer-select option {
+      background: #0B101D;
+      color: #FFF;
+    }
+
+    .podium-matrix-picker {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .podium-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .podium-tag {
+      width: 76px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .tag-gold {
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid #F59E0B;
+      color: #FCD34D;
+    }
+
+    .tag-silver {
+      background: rgba(148, 163, 184, 0.2);
+      border: 1px solid #94A3B8;
+      color: #E2E8F0;
+    }
+
+    .tag-bronze {
+      background: rgba(249, 115, 22, 0.2);
+      border: 1px solid #F97316;
+      color: #FDBA74;
+    }
+
+    .tag-part {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid #6366F1;
+      color: #C7D2FE;
+    }
+
+    .podium-select {
+      flex: 1;
+      background: rgba(5, 8, 17, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      padding: 8px 10px;
+      color: #FFF;
+      font-size: 13px;
+    }
+
+    .btn-award-all {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #6366F1, #4F46E5);
+      color: #FFF;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-award-all:hover {
+      box-shadow: 0 4px 18px rgba(99, 102, 241, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* Multi-Squad Custom Points Allocator */
+    .bulk-scorer-box {
+      background: var(--bg-card);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+    }
+
+    .bulk-team-selection-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .bulk-select-toggle-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-bulk-toggle {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      padding: 2px 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-bulk-toggle:hover {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34D399;
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .bulk-teams-chips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+      max-height: 170px;
+      overflow-y: auto;
+      padding: 6px 2px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      background: rgba(5, 8, 17, 0.5);
+    }
+
+    .bulk-team-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      font-size: 11.5px;
+      color: #CBD5E1;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .bulk-team-chip:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .bulk-team-chip.selected {
+      background: rgba(16, 185, 129, 0.18);
+      border-color: rgba(16, 185, 129, 0.5);
+      color: #A7F3D0;
+      font-weight: 600;
+    }
+
+    .bulk-team-chip input[type="checkbox"] {
+      accent-color: var(--corporate-emerald);
+      cursor: pointer;
+    }
+
+    .bulk-preset-points-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+
+    .btn-preset-pt {
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      color: #E2E8F0;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-preset-pt:hover {
+      background: rgba(16, 185, 129, 0.25);
+      border-color: var(--corporate-emerald);
+      color: #34D399;
+    }
+
+    /* Live Activity Log & Audit Feed */
+    .audit-log-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      max-height: 480px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .log-items-container {
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-right: 4px;
+      max-height: 360px;
+    }
+
+    .log-item {
+      background: rgba(5, 8, 17, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 12.5px;
+      border-left: 3px solid var(--corporate-emerald);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .log-item.penalty {
+      border-left-color: var(--corporate-rose);
+    }
+
+    .log-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .log-team-tag {
+      font-weight: 700;
+      color: #FFF;
+    }
+
+    .log-time-tag {
+      color: var(--text-faint);
+    }
+
+    .log-reason {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* =============================================================
+       MODAL: CUSTOM POINT ADJUSTMENT & TEAM DRILL-DOWN
+       ============================================================= */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 17, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 10001;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      height: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal-dialog {
+      width: 100%;
+      max-width: 540px;
+      background: rgba(11, 16, 29, 0.95);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .modal-close-btn:hover {
+      color: #FFF;
+    }
+
+    /* Toast Notification Alert */
+    #toast-notification {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 14px 20px;
+      background: rgba(11, 16, 29, 0.95);
+      border: 1px solid var(--corporate-emerald);
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(16, 185, 129, 0.3);
+      color: #FFF;
+      font-size: 13.5px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 10002;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #toast-notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* =============================================================
+       MOBILE & RESPONSIVE CONSOLE RULES
+       ============================================================= */
+    @media (max-width: 992px) {
+      .dashboard-container {
+        padding: 20px 16px calc(24px + env(safe-area-inset-bottom, 16px));
+      }
+
+      .dashboard-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .topbar-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #login-overlay {
+        align-items: flex-start !important;
+        padding: 16px 12px calc(24px + env(safe-area-inset-bottom, 16px)) !important;
+      }
+
+      .login-card {
+        padding: 26px 20px !important;
+        margin: auto 0 !important;
+        max-width: 100% !important;
+        border-radius: var(--radius-lg) !important;
+      }
+
+      .login-btn {
+        min-height: 50px !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        margin-top: 14px !important;
+      }
+
+      .modal-backdrop {
+        align-items: flex-start !important;
+        padding: 12px 10px calc(24px + env(safe-area-inset-bottom, 16px)) !important;
+      }
+
+      .modal-dialog {
+        padding: 22px 18px !important;
+        margin: auto 0 !important;
+        max-height: calc(100dvh - 24px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        border-radius: var(--radius-lg) !important;
+      }
+
+      .podium-row {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+      }
+
+      .podium-tag {
+        width: 100% !important;
+        justify-content: flex-start !important;
+        padding: 8px 12px !important;
+      }
+
+      .btn-award-all {
+        width: 100% !important;
+        min-height: 52px !important;
+        font-size: 14.5px !important;
+        font-weight: 700 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        padding: 14px 18px !important;
+      }
+
+      .bulk-preset-points-row {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+      }
+
+      .bulk-teams-chips-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+        gap: 8px !important;
+      }
+
+      .team-row-card {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+        padding: 14px 16px !important;
+      }
+
+      .team-quick-actions {
+        width: 100% !important;
+        justify-content: flex-start !important;
+        flex-wrap: wrap !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .login-title {
+        font-size: 22px !important;
+      }
+
+      .login-desc {
+        font-size: 12.5px !important;
+      }
+
+      .content-card {
+        padding: 16px 14px !important;
+      }
+
+      .btn-action {
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="bg-grid-overlay"></div>
+
+  <!-- =============================================================
+       1. SECURE ID & PASSWORD LOGIN OVERLAY
+       ============================================================= -->
+  <div id="login-overlay">
+    <div class="login-card" id="loginCard">
+      <div class="login-badge">
+        <i class="fa-solid fa-shield-halved"></i> St. Claret College BCA &middot; Inspire 2026
+      </div>
+      <h2 class="login-title">Admin Authentication</h2>
+      <p class="login-desc">Enter authorized credentials to access the 11-team leaderboard and points manager.</p>
+
+      <div class="login-error-msg" id="loginError">
+        <i class="fa-solid fa-circle-exclamation"></i> <span id="loginErrorText">Invalid Admin ID or Password.</span>
+      </div>
+
+      <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+        <div class="form-group">
+          <label class="form-label">
+            <span><i class="fa-solid fa-id-badge" style="color: var(--corporate-emerald);"></i> Admin ID</span>
+          </label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-user input-icon"></i>
+            <input type="text" class="form-control" id="loginAdminId" placeholder="e.g. admin" required
+              autocomplete="username">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <span><i class="fa-solid fa-key" style="color: var(--corporate-emerald);"></i> Password</span>
+          </label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input type="password" class="form-control" id="loginPassword" placeholder="••••••••••••" required
+              autocomplete="current-password">
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('loginPassword', this)">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="login-btn">
+          <i class="fa-solid fa-unlock-keyhole"></i> Authenticate & Enter Console
+        </button>
+
+        <div class="login-footer-links">
+          <a href="index.html"><i class="fa-solid fa-arrow-left"></i> Return to Main Website</a>
+          <span>Inspire v2.6 Core</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =============================================================
+       2. MAIN ADMIN CONSOLE INTERFACE
+       ============================================================= -->
+  <div class="admin-wrapper" id="adminPortalContent">
+
+    <!-- Top Admin Header -->
+    <header class="admin-header">
+      <div class="brand-section">
+        <div class="admin-logo-icon">
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+        <div class="admin-title-group">
+          <h1>Inspire 2026 &middot; Admin Control Portal</h1>
+          <p>11 SQUADS LEADERBOARD &amp; CENTRAL POINTS DIRECTORY</p>
+        </div>
+      </div>
+
+      <div class="admin-header-actions">
+        <div class="status-badge" id="cloudStatusBadge">
+          <div class="status-dot"></div>
+          <span id="syncStatusText">CLOUD SYNC ACTIVE</span>
+        </div>
+
+        <button class="btn-action btn-action-outline" onclick="forceCloudSync()" title="Push latest scores to all devices via Google Cloud">
+          <i class="fa-solid fa-cloud-arrow-up"></i> <span>Sync Cloud</span>
+        </button>
+
+        <button class="btn-action btn-action-outline" onclick="toggleSoundFx()" id="soundToggleBtn"
+          title="Toggle UI Synthesizer Sound FX">
+          <i class="fa-solid fa-volume-high"></i> <span id="soundStatusText">Sound: ON</span>
+        </button>
+
+        <a href="index.html" target="_blank" class="btn-action btn-action-outline">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> View Public Site
+        </a>
+
+        <button class="btn-action btn-action-outline" onclick="exportData('csv')">
+          <i class="fa-solid fa-file-csv"></i> Export CSV
+        </button>
+
+        <button class="btn-action btn-action-outline" onclick="confirmResetAllPoints()" title="Reset all 11 squad scores to zero">
+          <i class="fa-solid fa-rotate-left"></i> Reset All
+        </button>
+
+        <button class="btn-action btn-action-outline" onclick="openChangePasswordModal()">
+          <i class="fa-solid fa-key"></i> Passwords
+        </button>
+
+        <button class="btn-action btn-action-danger" onclick="handleAdminLogout()">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- KPI Metric Summary Strip -->
+    <div class="kpi-strip">
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: rgba(16, 185, 129, 0.15); color: #10B981;">
+          <i class="fa-solid fa-trophy"></i>
+        </div>
+        <div class="kpi-details">
+          <h4>Leading Squad</h4>
+          <div class="kpi-value" id="kpiLeaderTeam">TEAM CHRONIX</div>
+          <div class="kpi-sub" id="kpiLeaderPoints">0 pts &middot; Rank #1</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: rgba(99, 102, 241, 0.15); color: #6366F1;">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <div class="kpi-details">
+          <h4>Total Points Awarded</h4>
+          <div class="kpi-value" id="kpiTotalPoints">0 PTS</div>
+          <div class="kpi-sub">Across 11 Competing Squads</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.15); color: #F59E0B;">
+          <i class="fa-solid fa-flag-checkered"></i>
+        </div>
+        <div class="kpi-details">
+          <h4>14 Official Tracks</h4>
+          <div class="kpi-value">14 EVENTS</div>
+          <div class="kpi-sub">IT Quiz, BGMI, Hackathon &amp; more</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: rgba(6, 182, 212, 0.15); color: #06B6D4;">
+          <i class="fa-solid fa-satellite-dish"></i>
+        </div>
+        <div class="kpi-details">
+          <h4>Public Sync</h4>
+          <div class="kpi-value" style="color: #34D399;">LIVE ACTIVE</div>
+          <div class="kpi-sub">Zero-Latency Sync to Site</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================================
+         MAIN DASHBOARD: 11 TEAMS LEADERBOARD & EVENT SCORER
+         ============================================================= -->
+    <div class="dashboard-grid">
+
+      <!-- LEFT: 11 TEAMS INTERACTIVE LEADERBOARD -->
+      <div class="content-card">
+        <div class="content-header">
+          <div class="content-title-group">
+            <h3><i class="fa-solid fa-ranking-star" style="color: var(--corporate-amber);"></i> 11 Competing Squads
+              Leaderboard</h3>
+            <p>Live sorted standings. Click quick <strong>+10, +25, +50, +100</strong> buttons or <strong>Custom</strong>
+              to adjust team scores.</p>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);">
+            <i class="fa-solid fa-users"></i> 11 Registered Teams
+          </div>
+        </div>
+
+        <div class="teams-live-list" id="teamsLeaderboardList">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </div>
+
+      <!-- RIGHT: QUICK EVENT TRACK SCORER, MULTI-SQUAD ALLOCATOR & ACTIVITY LOG -->
+      <div class="sidebar-stack">
+
+        <!-- 1. Quick Event Scorer Matrix (Podium 1st/2nd/3rd) -->
+        <div class="event-scorer-box">
+          <div class="content-header" style="margin-bottom: 14px;">
+            <div class="content-title-group">
+              <h3><i class="fa-solid fa-award" style="color: var(--corporate-amber);"></i> Podium Event Scorer</h3>
+              <p>Award 1st (+100), 2nd (+70), 3rd (+40) for official tracks.</p>
+            </div>
+          </div>
+
+          <div class="scorer-select-group">
+            <label class="form-label" style="margin-bottom: 6px;">Select Competition Track</label>
+            <select class="scorer-select" id="eventScorerSelect" onchange="handleEventScorerChange()">
+              <!-- Populated via JS -->
+            </select>
+          </div>
+
+          <div class="podium-matrix-picker">
+            <div class="podium-row">
+              <span class="podium-tag tag-gold"><i class="fa-solid fa-crown"></i> 1st (+100)</span>
+              <select class="podium-select" id="scorerPlace1">
+                <option value="">-- Select 1st Place Team --</option>
+              </select>
+            </div>
+
+            <div class="podium-row">
+              <span class="podium-tag tag-silver"><i class="fa-solid fa-medal"></i> 2nd (+70)</span>
+              <select class="podium-select" id="scorerPlace2">
+                <option value="">-- Select 2nd Place Team --</option>
+              </select>
+            </div>
+
+            <div class="podium-row">
+              <span class="podium-tag tag-bronze"><i class="fa-solid fa-shield"></i> 3rd (+40)</span>
+              <select class="podium-select" id="scorerPlace3">
+                <option value="">-- Select 3rd Place Team --</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="btn-award-all" onclick="submitEventScorerPodium()">
+            <i class="fa-solid fa-check-double"></i> Commit Podium Scores &amp; Broadcast
+          </button>
+        </div>
+
+        <!-- 2. Multi-Squad Custom Points Allocator (Admin Selection) -->
+        <div class="bulk-scorer-box">
+          <div class="content-header" style="margin-bottom: 14px;">
+            <div class="content-title-group">
+              <h3><i class="fa-solid fa-users-gear" style="color: var(--corporate-emerald);"></i> Allocate Points to Specific Squads</h3>
+              <p>Select which squads receive points &amp; specify exact custom points.</p>
+            </div>
+          </div>
+
+          <!-- Target Squads Selection Chips/Checkboxes -->
+          <div class="bulk-team-selection-header">
+            <label class="form-label" style="margin-bottom: 0;">Select Target Squads (<span id="bulkSelectedCount">0</span> selected)</label>
+            <div class="bulk-select-toggle-actions">
+              <button type="button" class="btn-bulk-toggle" onclick="toggleSelectAllBulkTeams(true)">Select All</button>
+              <button type="button" class="btn-bulk-toggle" onclick="toggleSelectAllBulkTeams(false)">Clear All</button>
+            </div>
+          </div>
+
+          <div class="bulk-teams-chips-grid" id="bulkTeamsCheckboxList">
+            <!-- Populated dynamically via JS with 11 squads -->
+          </div>
+
+          <!-- Points Preset Buttons & Input -->
+          <div class="form-group" style="margin-top: 14px; margin-bottom: 14px;">
+            <label class="form-label">Points to Add per Selected Squad</label>
+            <div class="bulk-preset-points-row">
+              <button type="button" class="btn-preset-pt" onclick="setBulkPointsInput(5)">+5</button>
+              <button type="button" class="btn-preset-pt" onclick="setBulkPointsInput(10)">+10</button>
+              <button type="button" class="btn-preset-pt" onclick="setBulkPointsInput(15)">+15</button>
+              <button type="button" class="btn-preset-pt" onclick="setBulkPointsInput(20)">+20</button>
+              <button type="button" class="btn-preset-pt" onclick="setBulkPointsInput(25)">+25</button>
+              <button type="button" class="btn-preset-pt" onclick="setBulkPointsInput(50)">+50</button>
+            </div>
+            <div class="input-wrapper" style="margin-top: 6px;">
+              <i class="fa-solid fa-plus-minus input-icon"></i>
+              <input type="number" class="form-control" id="bulkPointsInput" placeholder="Points amount (e.g. 10, 20, -5)" value="10" required>
+            </div>
+          </div>
+
+          <!-- Reason / Description Field -->
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label">Event Track / Reason</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-tag input-icon"></i>
+              <input type="text" class="form-control" id="bulkReasonInput" placeholder="e.g. Round 1 Participation, Bonus Points, Quiz Qualifier" required>
+            </div>
+          </div>
+
+          <button class="btn-award-all" style="background: linear-gradient(135deg, #10B981, #059669);" onclick="submitBulkPointsAllocation()">
+            <i class="fa-solid fa-paper-plane"></i> Award Points to Selected Squads
+          </button>
+        </div>
+
+        <!-- Real-Time Audit Log -->
+        <div class="audit-log-box">
+          <div class="content-header" style="margin-bottom: 12px;">
+            <div class="content-title-group">
+              <h3><i class="fa-solid fa-list-check" style="color: var(--corporate-cyan);"></i> Live Points Audit Feed</h3>
+              <p>Chronological log of all score modifications.</p>
+            </div>
+            <button class="btn-pt" onclick="clearAuditLogs()" style="font-size: 11px; padding: 3px 8px;">Clear</button>
+          </div>
+
+          <div class="log-items-container" id="auditLogContainer">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 12.5px; color: var(--text-faint);">
+          <span>© 2026 Dept of Computer Science &middot; St. Claret College</span> &nbsp;|&nbsp;
+          <span style="display: inline-flex; align-items: center; gap: 5px;">
+            <i class="fa-solid fa-code" style="color: var(--corporate-amber);"></i>
+            Created by &ndash; <strong style="color: #F59E0B;">Likhith g p</strong> and <strong style="color: #818CF8;">Poornachandra B</strong>
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- =============================================================
+       MODAL: CUSTOM POINTS ADJUSTER
+       ============================================================= -->
+  <div class="modal-backdrop" id="customPointsModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 style="font-family: var(--font-serif); font-size: 20px; color: #FFF;" id="modalTeamTitle">Custom Point
+          Adjustment</h3>
+        <button class="modal-close-btn" onclick="closeCustomPointsModal()">&times;</button>
+      </div>
+
+      <form onsubmit="handleCustomPointsSubmit(event)">
+        <input type="hidden" id="modalTeamId">
+
+        <div style="margin-bottom: 12px;">
+          <label class="form-label">Current Squad Score: <strong id="modalCurrentPointsBadge" style="color: #34D399; font-size: 16px;">0 pts</strong></label>
+        </div>
+
+        <!-- Mode: Add/Subtract vs Set Direct Score -->
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label">Operation Mode</label>
+          <div style="display: flex; gap: 10px;">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: #FFF; cursor: pointer;">
+              <input type="radio" name="pointOpMode" value="adjust" checked onchange="togglePointOpMode(this.value)" style="accent-color: var(--corporate-emerald);">
+              <span>Add / Deduct (+/-)</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: #FFF; cursor: pointer;">
+              <input type="radio" name="pointOpMode" value="set" onchange="togglePointOpMode(this.value)" style="accent-color: var(--corporate-emerald);">
+              <span>Set Absolute Total Score (=)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Fast Presets Row -->
+        <div id="modalPresetsSection" style="margin-bottom: 10px;">
+          <label class="form-label" style="font-size: 11.5px; margin-bottom: 4px;">Quick Presets</label>
+          <div class="bulk-preset-points-row">
+            <button type="button" class="btn-preset-pt" onclick="setModalPointInput(5)">+5</button>
+            <button type="button" class="btn-preset-pt" onclick="setModalPointInput(10)">+10</button>
+            <button type="button" class="btn-preset-pt" onclick="setModalPointInput(15)">+15</button>
+            <button type="button" class="btn-preset-pt" onclick="setModalPointInput(20)">+20</button>
+            <button type="button" class="btn-preset-pt" onclick="setModalPointInput(25)">+25</button>
+            <button type="button" class="btn-preset-pt" onclick="setModalPointInput(50)">+50</button>
+            <button type="button" class="btn-preset-pt" onclick="setModalPointInput(100)">+100</button>
+            <button type="button" class="btn-preset-pt" style="color: #FB7185; border-color: rgba(244, 63, 94, 0.3);" onclick="setModalPointInput(-10)">-10</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" id="modalPointsValueLabel">Points to Add / Deduct</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-plus-minus input-icon"></i>
+            <input type="number" class="form-control" id="modalPointsValue" placeholder="e.g. 10 or -10" required>
+          </div>
+          <span id="modalPointsHint" style="font-size: 11.5px; color: var(--text-faint); margin-top: 4px; display: block;">
+            Enter positive value to add, negative value to deduct.
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Reason / Event Track</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-tag input-icon"></i>
+            <input type="text" class="form-control" id="modalPointsReason"
+              placeholder="e.g. Event Round 1, Fair Play, Direct Edit" required>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 24px;">
+          <button type="button" class="btn-action btn-action-outline" style="flex: 1;"
+            onclick="closeCustomPointsModal()">Cancel</button>
+          <button type="submit" class="btn-action btn-action-emerald" style="flex: 1;">Save &amp; Broadcast</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =============================================================
+       MODAL: TEAM PROFILE DRILL-DOWN
+       ============================================================= -->
+  <div class="modal-backdrop" id="teamProfileModal">
+    <div class="modal-dialog" style="max-width: 580px;">
+      <div class="modal-header">
+        <h3 style="font-family: var(--font-serif); font-size: 22px; color: #FFF;" id="profileTeamName">Team Details</h3>
+        <button class="modal-close-btn" onclick="closeTeamProfileModal()">&times;</button>
+      </div>
+
+      <div id="profileTeamContent">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================================================
+       MODAL: CHANGE ADMIN PASSWORD
+       ============================================================= -->
+  <div class="modal-backdrop" id="changePasswordModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 style="font-family: var(--font-serif); font-size: 20px; color: #FFF;">Change Admin Credentials</h3>
+        <button class="modal-close-btn" onclick="closeChangePasswordModal()">&times;</button>
+      </div>
+
+      <form onsubmit="handleChangePasswordSubmit(event)">
+        <div class="form-group">
+          <label class="form-label">New Admin ID</label>
+          <input type="text" class="form-control" id="newAdminId" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">New Password</label>
+          <input type="password" class="form-control" id="newPassword" required minlength="4">
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn-action btn-action-outline" style="flex: 1;"
+            onclick="closeChangePasswordModal()">Cancel</button>
+          <button type="submit" class="btn-action btn-action-emerald" style="flex: 1;">Update Credentials</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Alert -->
+  <div id="toast-notification">
+    <i class="fa-solid fa-circle-check" style="color: var(--corporate-emerald); font-size: 18px;"></i>
+    <span id="toastMessage">Points updated successfully.</span>
+  </div>
+
+  <!-- =============================================================
+       JAVASCRIPT: CORE SIMULATION ENGINE & POINTS LOGIC
+       ============================================================= -->
+  <script>
+    // -------------------------------------------------------------
+    // 1. DATA DEFINITIONS: 11 COMPETING SQUADS & 14 TRACKS
+    // -------------------------------------------------------------
+    const INITIAL_TEAMS_DATA = [
+      {
+        id: "team_01",
+        num: "TEAM 01",
+        name: "TEAM CHRONIX",
+        accent: "#F59E0B",
+        accent2: "#F97316",
+        captain: "Veronica Vinutha K",
+        captainImg: "team01_captain.jpg",
+        captainPhone: "+91 87923 40947",
+        viceCaptain: "Sunidhi Chandra",
+        viceCaptainImg: "team01_vice_captain.jpg",
+        viceCaptainPhone: "+91 70047 32280",
+        points: 0,
+        wins: 0,
+        history: []
+      },
+      {
+        id: "team_02",
+        num: "TEAM 02",
+        name: "SYNDICATE",
+        accent: "#06B6D4",
+        accent2: "#38BDF8",
+        captain: "Pavan S",
+        captainImg: "team02_captain.jpg",
+        captainPhone: "+91 70197 03479",
+        viceCaptain: "Asim Khan",
+        viceCaptainImg: "team02_vice_captain.jpg",
+        viceCaptainPhone: "+91 76761 84345",
+        points: 0,
+        wins: 0,
+        history: []
+      },
+      {
+        id: "team_03",
+        num: "TEAM 03",
+        name: "QUANTUM PARADOX",
+        accent: "#10B981",
+        accent2: "#14B8A6",
+        captain: "Yuvaraj S",
+        captainImg: "team03_captain.jpg",
+        captainPhone: "+91 73489 47396",
+        viceCaptain: "Prerana S",
+        viceCaptainImg: "team03_vice_captain.jpg",
+        viceCaptainPhone: "+91 83100 17332",
+        points: 0,
+        wins: 0,
+        history: []
+      },
+      {
+        id: "team_04",
+        num: "TEAM 04",
+        name: "VERA",
+        accent: "#6366F1",
+        accent2: "#8B5CF6",
+        captain: "Madhura H K",
+        captainImg: "team04_captain.jpg",
+        captainPhone: "+91 91084 03139",
+        viceCaptain: "Himani P",
+        viceCaptainImg: "team04_vice_captain.jpg",
+        viceCaptainPhone: "+91 70225 88199",
+        points: 0,
+        wins: 0,
+        history: []
+      },
+      {
+        id: "team_05",
+        num: "TEAM 05",
+        name: "ERA-X",
+        accent: "#F43F5E",
+        accent2: "#FB7185",
+        captain: "Eshwari P",
+        captainImg: "team05_captain.jpg",
+        captainPhone: "+91 93805 89958",
+        viceCaptain: "Sinchana V",
+        viceCaptainImg: "team05_vice_captain.jpg",
+        viceCaptainPhone: "+91 99002 83844",
+        points: 0,
+        wins: 0,
+        history: []
+      },
+      {
+        id: "team_06",
+        num: "TEAM 06",
+        name: "ERONX",
+        accent: "#A855F7",
+        accent2: "#D946EF",
+        captain: "Zoya Fathima",
+        captainImg: "team06_captain.jpg",
+        captainPhone: "+91 95386 59964",
+        viceCaptain: "Simran Bharatiya",
+        viceCaptainImg: "team06_vice_captain.jpg",
+        viceCaptainPhone: "+91 90198 26117",
+        points: 0,
+        wins: 0,
+        history: []
+      },
+      {
+        id: "team_07",
+        num: "TEAM 07",
+        name: "TIME LOOP",
+        accent: "#3B82F6",
+        accent2: "#60A5FA",
+        captain: "Harshitha R",
+        captainImg: "team07_captain.jpg",
+        captainPhone: "+91 97390 78354",
+        viceCaptain: "Adhithi Rashmi D",
+        viceCaptainImg: "team07_vice_captain.jpg",
+        viceCaptainPhone: "+91 86609 68358",
+        points: 0,
+        wins: 0,
+        history: []
+      },
+      {
+        id: "team_08",
+        num: "TEAM 08",
+        name: "PRABHUTVA",
+        accent: "#84CC16",
+        accent2: "#10B981",
+        captain: "Hamsa Lakshmi G",
+        captainImg: "team08_captain.jpg",
+        captainPhone: "+91 74839 89872",
+        viceCaptain: "Ananya R Hakari",
+        viceCaptainImg: "team08_vice_captain.jpg",
+        viceCaptainPhone: "+91 96631 97670",
+        points: 0,
+        wins: 0,
+        history: []
+      },
+      {
+        id: "team_09",
+        num: "TEAM 09",
+        name: "YUGANTARA",
+        accent: "#FB923C",
+        accent2: "#FACC15",
+        captain: "Yashaswini C",
+        captainImg: "team09_captain.jpg",
+        captainPhone: "+91 94818 70358",
+        viceCaptain: "Haripriya O",
+        viceCaptainImg: "team09_vice_captain.jpg",
+        viceCaptainPhone: "+91 63667 12606",
+        points: 0,
+        wins: 0,
+        history: []
+      },
+      {
+        id: "team_10",
+        num: "TEAM 10",
+        name: "EVARA",
+        accent: "#EC4899",
+        accent2: "#F43F5E",
+        captain: "Sanjana S Shetty",
+        captainImg: "team10_captain.jpg",
+        captainPhone: "+91 70229 05324",
+        viceCaptain: "Chinmayi S H",
+        viceCaptainImg: "team10_vice_captain.jpg",
+        viceCaptainPhone: "+91 90194 58435",
+        points: 0,
+        wins: 0,
+        history: []
+      },
+      {
+        id: "team_11",
+        num: "TEAM 11",
+        name: "CHRONO CREW",
+        accent: "#14B8A6",
+        accent2: "#06B6D4",
+        captain: "Rishika D",
+        captainImg: "team11_captain.jpg",
+        captainPhone: "+91 99457 70481",
+        viceCaptain: "Manya R",
+        viceCaptainImg: "team11_vice_captain.jpg",
+        viceCaptainPhone: "+91 63630 67162",
+        points: 0,
+        wins: 0,
+        history: []
+      }
+    ];
+
+    const OFFICIAL_TRACKS = [
+      { id: "it-quiz", name: "IT Quiz (Silicon Brainwave)" },
+      { id: "it-manager", name: "IT Manager (Chief Tech Officer)" },
+      { id: "debate", name: "Debate (Boardroom Discourse)" },
+      { id: "startup-pitch", name: "Startup Pitch (Venture Forge)" },
+      { id: "photography", name: "Photography (Studio Vanguard)" },
+      { id: "graphical-designing", name: "Graphical Designing (Pixel Brandscape)" },
+      { id: "coding-debugging", name: "Coding & Debugging (CodeCraft)" },
+      { id: "ipl-auction", name: "IPL Auction (Franchise Mogul)" },
+      { id: "logo-designing", name: "Logo Designing (Brand Identity)" },
+      { id: "treasure-hunt", name: "Treasure Hunt (Cipher Quest)" },
+      { id: "decode-evidence", name: "Decode Evidence (Cyber Forensics)" },
+      { id: "bgmi", name: "BGMI Esports (Apex Battlegrounds)" },
+      { id: "free-fire", name: "Free Fire Esports (Survival Clash)" },
+      { id: "typing-marathon", name: "Typing Marathon (Keystroke Velocity)" }
+    ];
+
+    // Local Storage Keys
+    const LS_KEY_TEAMS = "inspire_2026_teams_leaderboard";
+    const LS_KEY_LOGS = "inspire_2026_audit_logs";
+    const LS_KEY_AUTH = "inspire_2026_admin_auth";
+    const LS_KEY_CREDS = "inspire_2026_admin_credentials";
+    const LS_KEY_SOUND = "inspire_2026_sound_enabled";
+
+    // Django REST API Backend & Google Sheets Cloud Sync Endpoints
+    const DJANGO_API_BASE_URL = "http://127.0.0.1:8000/api";
+    const GOOGLE_SHEETS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxRGYUj04rvaQeBA9iAk878Upr6Xd8AQB9a9vwiRsItySnhxJ0Tv54C5lnAVd9r388pCg/exec";
+
+    // BroadcastChannel for instant cross-tab live synchronization
+    const syncChannel = (typeof BroadcastChannel !== 'undefined') ? new BroadcastChannel('inspire_2026_sync') : null;
+
+    // State Variables
+    let teamsData = [];
+    let auditLogs = [];
+    let soundEnabled = true;
+    let isCloudPushing = false;
+    let lastCloudSyncTime = null;
+
+    // -------------------------------------------------------------
+    // REAL-TIME BACKEND DATABASE SYNCHRONIZATION (DJANGO + CLOUD)
+    // -------------------------------------------------------------
+    async function syncScoresToCloud() {
+      const statusText = document.getElementById('syncStatusText');
+      if (statusText) {
+        statusText.textContent = "SYNCING TO DJANGO & CLOUD...";
+        statusText.style.color = "#FBBF24";
+      }
+
+      try {
+        isCloudPushing = true;
+        let djangoSuccess = false;
+
+        // 1. Primary Sync: Django REST API Backend
+        if (DJANGO_API_BASE_URL) {
+          try {
+            const djRes = await fetch(`${DJANGO_API_BASE_URL}/scores/update/`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(teamsData)
+            });
+            if (djRes.ok) {
+              djangoSuccess = true;
+            }
+          } catch (djErr) {
+            console.info("Django API push note:", djErr);
+          }
+        }
+
+        // 2. Secondary Sync: Google Sheets Web App
+        if (GOOGLE_SHEETS_WEB_APP_URL && GOOGLE_SHEETS_WEB_APP_URL.trim().startsWith("http")) {
+          const payload = {
+            action: "update_scores",
+            teams: teamsData,
+            auditLogs: auditLogs.slice(0, 50),
+            timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+          };
+
+          await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+              'Content-Type': 'text/plain;charset=utf-8'
+            },
+            body: JSON.stringify(payload)
+          });
+        }
+
+        lastCloudSyncTime = new Date();
+        if (statusText) {
+          statusText.textContent = djangoSuccess ? "DJANGO LIVE (PORT 8000) & CLOUD SYNCED" : "CLOUD SYNC LIVE (ALL DEVICES)";
+          statusText.style.color = "#34D399";
+        }
+      } catch (err) {
+        console.warn("Cloud sync warning:", err);
+        if (statusText) {
+          statusText.textContent = "LOCAL SAVED · SYNC PENDING";
+          statusText.style.color = "#F87171";
+        }
+      } finally {
+        isCloudPushing = false;
+      }
+    }
+
+    async function fetchScoresFromCloud(silent = false) {
+      if (isCloudPushing) return;
+
+      try {
+        let synced = false;
+
+        // 1. Try Django REST API Backend first
+        if (DJANGO_API_BASE_URL) {
+          try {
+            const djRes = await fetch(`${DJANGO_API_BASE_URL}/scores/?t=` + Date.now());
+            if (djRes.ok) {
+              const djData = await djRes.json();
+              if (djData && djData.status === "success" && Array.isArray(djData.data) && djData.data.length > 0) {
+                let hasChanges = false;
+                djData.data.forEach(remoteTeam => {
+                  const local = teamsData.find(t => t.id === remoteTeam.squad_id || t.id === remoteTeam.id || t.num === remoteTeam.num);
+                  if (local && local.points !== remoteTeam.points) {
+                    local.points = remoteTeam.points;
+                    hasChanges = true;
+                  }
+                });
+
+                if (hasChanges) {
+                  localStorage.setItem(LS_KEY_TEAMS, JSON.stringify(teamsData));
+                  renderLeaderboard();
+                  populateEventScorerDropdowns();
+                  if (!silent) showToast("Live scores updated from Django backend!");
+                }
+                synced = true;
+              }
+            }
+          } catch (djErr) {}
+        }
+
+        // 2. Secondary Fallback to Google Sheets
+        if (!synced && GOOGLE_SHEETS_WEB_APP_URL && GOOGLE_SHEETS_WEB_APP_URL.trim().startsWith("http")) {
+          const res = await fetch(GOOGLE_SHEETS_WEB_APP_URL + "?action=get_scores&t=" + Date.now());
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.status === "success" && Array.isArray(data.teams) && data.teams.length > 0) {
+              let hasChanges = false;
+              data.teams.forEach(remoteTeam => {
+                const local = teamsData.find(t => t.id === remoteTeam.id || t.num === remoteTeam.num);
+                if (local && local.points !== remoteTeam.points) {
+                  local.points = remoteTeam.points;
+                  hasChanges = true;
+                }
+              });
+
+              if (hasChanges) {
+                localStorage.setItem(LS_KEY_TEAMS, JSON.stringify(teamsData));
+                if (data.auditLogs && Array.isArray(data.auditLogs) && data.auditLogs.length > 0) {
+                  auditLogs = data.auditLogs;
+                  saveAuditLogs();
+                  renderAuditLogs();
+                }
+                renderLeaderboard();
+                populateEventScorerDropdowns();
+                if (!silent) showToast("Live scores updated from cloud!");
+              }
+            }
+          }
+        }
+      } catch (err) {
+        // Silent fallback
+      }
+    }
+
+    function forceCloudSync() {
+      playSynthSound('click');
+      showToast("Broadcasting live scores to all student devices & Google Sheets...");
+      syncScoresToCloud();
+    }
+
+    // -------------------------------------------------------------
+    // 2. AUDIO SYNTHESIZER FEEDBACK (Web Audio API)
+    // -------------------------------------------------------------
+    const audioCtx = (window.AudioContext || window.webkitAudioContext) ? new (window.AudioContext || window.webkitAudioContext)() : null;
+
+    function playSynthSound(type = 'point') {
+      if (!soundEnabled || !audioCtx) return;
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      try {
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'point') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, now); // C5
+          osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.15); // G5
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+          osc.start(now);
+          osc.stop(now + 0.2);
+        } else if (type === 'win') {
+          // Arpeggio
+          [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.connect(g);
+            g.connect(audioCtx.destination);
+            o.frequency.value = freq;
+            g.gain.setValueAtTime(0.1, now + i * 0.08);
+            g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.25);
+            o.start(now + i * 0.08);
+            o.stop(now + i * 0.08 + 0.25);
+          });
+        } else if (type === 'click') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(350, now);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        }
+      } catch (e) {
+        // Safe fallback
+      }
+    }
+
+    function toggleSoundFx() {
+      soundEnabled = !soundEnabled;
+      localStorage.setItem(LS_KEY_SOUND, soundEnabled ? 'true' : 'false');
+      updateSoundButtonUI();
+      if (soundEnabled) playSynthSound('click');
+    }
+
+    function updateSoundButtonUI() {
+      const btn = document.getElementById('soundToggleBtn');
+      const text = document.getElementById('soundStatusText');
+      if (soundEnabled) {
+        btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> <span>Sound: ON</span>';
+        btn.style.color = '#34D399';
+      } else {
+        btn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> <span>Sound: OFF</span>';
+        btn.style.color = 'var(--text-faint)';
+      }
+    }
+
+    // -------------------------------------------------------------
+    // 3. AUTHENTICATION (ID & PASSWORD)
+    // -------------------------------------------------------------
+    function getStoredCredentials() {
+      const stored = localStorage.getItem(LS_KEY_CREDS);
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (parsed && parsed.pass === "inspire2026") {
+            parsed.pass = "Poorna@292004";
+            localStorage.setItem(LS_KEY_CREDS, JSON.stringify(parsed));
+          }
+          return parsed;
+        } catch (e) { }
+      }
+      return { id: "admin", pass: "Poorna@292004" };
+    }
+
+    function checkAuthStatus() {
+      const isAuthenticated = sessionStorage.getItem(LS_KEY_AUTH) === 'true';
+      const overlay = document.getElementById('login-overlay');
+      if (isAuthenticated) {
+        overlay.classList.add('hidden');
+      } else {
+        overlay.classList.remove('hidden');
+        document.getElementById('loginPassword').value = '';
+      }
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const enteredId = document.getElementById('loginAdminId').value.trim();
+      const enteredPass = document.getElementById('loginPassword').value.trim();
+      const creds = getStoredCredentials();
+
+      if (enteredId === creds.id && enteredPass === creds.pass) {
+        // Success
+        sessionStorage.setItem(LS_KEY_AUTH, 'true');
+        document.getElementById('login-overlay').classList.add('hidden');
+        document.getElementById('loginError').style.display = 'none';
+        playSynthSound('win');
+        showToast('Authentication successful! Welcome Admin.');
+      } else {
+        // Failure
+        const err = document.getElementById('loginError');
+        err.style.display = 'flex';
+        document.getElementById('loginErrorText').textContent = 'Invalid Admin ID or Password. Try again.';
+        const card = document.getElementById('loginCard');
+        card.classList.add('shake');
+        setTimeout(() => card.classList.remove('shake'), 500);
+      }
+    }
+
+    function fillDemoCredentials() {
+      const creds = getStoredCredentials();
+      document.getElementById('loginAdminId').value = creds.id;
+      document.getElementById('loginPassword').value = creds.pass;
+      playSynthSound('click');
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+      } else {
+        input.type = 'password';
+        btn.innerHTML = '<i class="fa-solid fa-eye"></i>';
+      }
+    }
+
+    function handleAdminLogout() {
+      if (confirm('Are you sure you want to log out of the Admin Console?')) {
+        localStorage.removeItem(LS_KEY_AUTH);
+        sessionStorage.removeItem(LS_KEY_AUTH);
+        document.getElementById('login-overlay').classList.remove('hidden');
+        showToast('Logged out securely.');
+      }
+    }
+
+    function openChangePasswordModal() {
+      const creds = getStoredCredentials();
+      document.getElementById('newAdminId').value = creds.id;
+      document.getElementById('newPassword').value = creds.pass;
+      document.getElementById('changePasswordModal').classList.add('active');
+    }
+
+    function closeChangePasswordModal() {
+      document.getElementById('changePasswordModal').classList.remove('active');
+    }
+
+    function handleChangePasswordSubmit(e) {
+      e.preventDefault();
+      const newId = document.getElementById('newAdminId').value.trim();
+      const newPass = document.getElementById('newPassword').value.trim();
+      if (!newId || !newPass) return;
+
+      localStorage.setItem(LS_KEY_CREDS, JSON.stringify({ id: newId, pass: newPass }));
+      closeChangePasswordModal();
+      showToast('Admin credentials updated successfully.');
+      playSynthSound('click');
+    }
+
+    // -------------------------------------------------------------
+    // 4. DATA INITIALIZATION & STORAGE
+    // -------------------------------------------------------------
+    function loadData() {
+      // Ensure credentials updated
+      getStoredCredentials();
+
+      const defaultMap = {};
+      INITIAL_TEAMS_DATA.forEach(t => {
+        defaultMap[t.id] = t;
+        defaultMap[t.num] = t;
+      });
+
+      const storedTeams = localStorage.getItem(LS_KEY_TEAMS);
+      if (storedTeams) {
+        try {
+          teamsData = JSON.parse(storedTeams);
+          if (Array.isArray(teamsData) && teamsData.length > 0) {
+            // Clean legacy mock demo points (180, 150, 140...)
+            const pts = teamsData.map(t => Number(t.points) || 0);
+            if (pts.length === 11 && pts[0] === 180 && pts[1] === 150 && pts[2] === 140) {
+              teamsData.forEach(t => t.points = 0);
+            }
+
+            teamsData.forEach(t => {
+              const def = defaultMap[t.id] || defaultMap[t.num];
+              if (def) {
+                t.captainImg = def.captainImg;
+                t.viceCaptainImg = def.viceCaptainImg;
+                if (!t.captain) t.captain = def.captain;
+                if (!t.viceCaptain) t.viceCaptain = def.viceCaptain;
+                if (!t.captainPhone) t.captainPhone = def.captainPhone;
+                if (!t.viceCaptainPhone) t.viceCaptainPhone = def.viceCaptainPhone;
+                if (!t.accent) t.accent = def.accent;
+                if (!t.accent2) t.accent2 = def.accent2;
+                if (!t.name) t.name = def.name;
+                if (!t.num) t.num = def.num;
+                t.points = Number(t.points) || 0;
+              } else {
+                if (t.captainImg) t.captainImg = t.captainImg.replace(/^images\//, '');
+                if (t.viceCaptainImg) t.viceCaptainImg = t.viceCaptainImg.replace(/^images\//, '');
+                t.points = Number(t.points) || 0;
+              }
+            });
+            saveTeamsData(false);
+          } else {
+            teamsData = JSON.parse(JSON.stringify(INITIAL_TEAMS_DATA));
+            teamsData.forEach(t => t.points = 0);
+            saveTeamsData(false);
+          }
+        } catch (e) {
+          teamsData = JSON.parse(JSON.stringify(INITIAL_TEAMS_DATA));
+        }
+      } else {
+        // Initialize with 0 clean points for all 11 squads
+        teamsData = JSON.parse(JSON.stringify(INITIAL_TEAMS_DATA));
+        teamsData.forEach(t => t.points = 0);
+        saveTeamsData(false);
+      }
+
+      const storedLogs = localStorage.getItem(LS_KEY_LOGS);
+      if (storedLogs) {
+        try {
+          auditLogs = JSON.parse(storedLogs);
+        } catch (e) {
+          auditLogs = [];
+        }
+      } else {
+        auditLogs = [
+          { time: new Date().toLocaleTimeString(), team: "ADMIN CONSOLE", change: "INITIALIZED", reason: "Ready for Live Fest Point Allocation", isPenalty: false }
+        ];
+        saveAuditLogs();
+      }
+
+      const soundPref = localStorage.getItem(LS_KEY_SOUND);
+      soundEnabled = (soundPref !== 'false');
+      updateSoundButtonUI();
+    }
+
+    function saveTeamsData(broadcast = true) {
+      localStorage.setItem(LS_KEY_TEAMS, JSON.stringify(teamsData));
+      if (broadcast && syncChannel) {
+        syncChannel.postMessage({ type: 'TEAMS_UPDATE', data: teamsData });
+      }
+      if (broadcast) {
+        syncScoresToCloud();
+      }
+    }
+
+    function saveAuditLogs() {
+      localStorage.setItem(LS_KEY_LOGS, JSON.stringify(auditLogs.slice(0, 80)));
+    }
+
+    // -------------------------------------------------------------
+    // 5. LEADERBOARD RENDERING & DYNAMIC RANK SHIFTS
+    // -------------------------------------------------------------
+    function renderLeaderboard() {
+      const container = document.getElementById('teamsLeaderboardList');
+      if (!container) return;
+
+      // Sort teams descending by points (ties preserve squad order)
+      const sortedTeams = [...teamsData].sort((a, b) => {
+        if (b.points !== a.points) return b.points - a.points;
+        return a.num.localeCompare(b.num, undefined, { numeric: true });
+      });
+      const maxScore = Math.max(1, sortedTeams[0].points);
+
+      container.innerHTML = '';
+
+      sortedTeams.forEach((team, index) => {
+        const rank = index + 1;
+        const rankClass = (rank === 1) ? 'rank-1' : (rank === 2) ? 'rank-2' : (rank === 3) ? 'rank-3' : '';
+        const barPercent = (team.points === 0) ? 0 : Math.min(100, Math.round((team.points / maxScore) * 100));
+
+        const card = document.createElement('div');
+        card.className = `team-row-card ${rankClass}`;
+        card.style.setProperty('--team-accent', team.accent);
+
+        card.innerHTML = `
+          <div class="team-rank-box">
+            ${rank === 1 && team.points > 0 ? '<i class="fa-solid fa-crown" style="font-size: 12px; margin-bottom: 2px;"></i>' : ''}
+            <span>#${rank}</span>
+          </div>
+
+          <div class="team-info-box" onclick="openTeamProfileModal('${team.id}')" style="cursor: pointer;" title="Click to view squad profile & phone">
+            <div class="team-avatars-cluster">
+              <img src="${team.captainImg}" class="team-avatar-img" alt="${team.captain}"
+                onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(team.captain)}&background=0F172A&color=F59E0B&size=100'">
+              <img src="${team.viceCaptainImg}" class="team-avatar-img" alt="${team.viceCaptain}"
+                onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(team.viceCaptain)}&background=0F172A&color=06B6D4&size=100'">
+            </div>
+            <div class="team-name-tagline">
+              <h4>${team.name} <span class="team-squad-number">${team.num}</span></h4>
+              <span class="team-leaders-caption">
+                <i class="fa-solid fa-crown" style="color: ${team.accent};"></i> ${team.captain} &middot; 
+                <i class="fa-solid fa-shield-cat" style="color: ${team.accent2};"></i> ${team.viceCaptain}
+              </span>
+            </div>
+          </div>
+
+          <div class="team-score-cluster">
+            <div class="team-points-counter">
+              <div class="team-points-val">${team.points}</div>
+              <div class="team-points-lbl">Points</div>
+            </div>
+            <div class="team-score-bar-wrapper">
+              <div class="team-score-bar-fill" style="width: ${barPercent}%; background: linear-gradient(90deg, ${team.accent}, ${team.accent2});"></div>
+            </div>
+          </div>
+
+          <div class="team-quick-actions">
+            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 5, 'Quick +5')" title="Add +5 pts">+5</button>
+            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 10, 'Quick +10')" title="Add +10 pts">+10</button>
+            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 20, 'Quick +20')" title="Add +20 pts">+20</button>
+            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 25, 'Quick +25')" title="Add +25 pts">+25</button>
+            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 50, 'Quick +50')" title="Add +50 pts">+50</button>
+            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 100, 'Major Win +100')" title="Add +100 pts">+100</button>
+            <button class="btn-pt btn-pt-custom" onclick="openCustomPointsModal('${team.id}')" title="Custom Points & Edit Score">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      // Update KPI Strip
+      updateKpiStrip(sortedTeams);
+    }
+
+    function updateKpiStrip(sortedTeams) {
+      if (!sortedTeams || sortedTeams.length === 0) return;
+      const leader = sortedTeams[0];
+      const total = sortedTeams.reduce((acc, t) => acc + t.points, 0);
+
+      document.getElementById('kpiLeaderTeam').textContent = leader.points > 0 ? leader.name : "Equal Baseline";
+      document.getElementById('kpiLeaderPoints').textContent = `${leader.points} pts · Rank #1`;
+      document.getElementById('kpiTotalPoints').textContent = `${total} PTS`;
+    }
+
+    // -------------------------------------------------------------
+    // 6. POINTS MODIFICATIONS & AUDIT LOGGING
+    // -------------------------------------------------------------
+    function addPointsDirectly(teamId, amount, reason = "Manual Point Adjustment") {
+      const team = teamsData.find(t => t.id === teamId);
+      if (!team) return;
+
+      team.points += amount;
+      if (team.points < 0) team.points = 0;
+
+      const logEntry = {
+        time: new Date().toLocaleTimeString(),
+        team: team.name,
+        change: (amount >= 0 ? `+${amount}` : `${amount}`) + " pts",
+        reason: reason,
+        isPenalty: amount < 0
+      };
+
+      auditLogs.unshift(logEntry);
+      saveTeamsData();
+      saveAuditLogs();
+      renderLeaderboard();
+      renderAuditLogs();
+
+      playSynthSound(amount > 0 ? 'point' : 'click');
+      showToast(`${team.name} updated: ${amount >= 0 ? '+' + amount : amount} points!`);
+    }
+
+    let currentPointOpMode = 'adjust';
+
+    function togglePointOpMode(mode) {
+      currentPointOpMode = mode;
+      const valLabel = document.getElementById('modalPointsValueLabel');
+      const hint = document.getElementById('modalPointsHint');
+      const presets = document.getElementById('modalPresetsSection');
+      const valInput = document.getElementById('modalPointsValue');
+
+      if (mode === 'set') {
+        valLabel.textContent = 'Set Total Absolute Score';
+        hint.textContent = 'This will set the team score directly to this exact number.';
+        presets.style.display = 'none';
+        valInput.placeholder = 'e.g. 150';
+      } else {
+        valLabel.textContent = 'Points to Add / Deduct';
+        hint.textContent = 'Enter positive value to add (+), negative value to deduct (-).';
+        presets.style.display = 'block';
+        valInput.placeholder = 'e.g. 10 or -10';
+      }
+    }
+
+    function setModalPointInput(pts) {
+      const input = document.getElementById('modalPointsValue');
+      if (input) input.value = pts;
+    }
+
+    function openCustomPointsModal(teamId) {
+      const team = teamsData.find(t => t.id === teamId);
+      if (!team) return;
+
+      document.getElementById('modalTeamId').value = teamId;
+      document.getElementById('modalTeamTitle').textContent = `Adjust Points &middot; ${team.name}`;
+      document.getElementById('modalCurrentPointsBadge').textContent = `${team.points} pts`;
+      document.getElementById('modalPointsValue').value = '';
+      document.getElementById('modalPointsReason').value = '';
+
+      const adjustRadio = document.querySelector('input[name="pointOpMode"][value="adjust"]');
+      if (adjustRadio) adjustRadio.checked = true;
+      togglePointOpMode('adjust');
+
+      document.getElementById('customPointsModal').classList.add('active');
+    }
+
+    function closeCustomPointsModal() {
+      document.getElementById('customPointsModal').classList.remove('active');
+    }
+
+    function handleCustomPointsSubmit(e) {
+      e.preventDefault();
+      const teamId = document.getElementById('modalTeamId').value;
+      const team = teamsData.find(t => t.id === teamId);
+      if (!team) return;
+
+      const pts = parseInt(document.getElementById('modalPointsValue').value, 10);
+      const reason = document.getElementById('modalPointsReason').value.trim() || 'Manual Point Update';
+
+      if (isNaN(pts)) return;
+
+      if (currentPointOpMode === 'set') {
+        const oldPts = team.points;
+        team.points = Math.max(0, pts);
+        const diff = team.points - oldPts;
+
+        auditLogs.unshift({
+          time: new Date().toLocaleTimeString(),
+          team: team.name,
+          change: `Score set to ${team.points} pts (${diff >= 0 ? '+' + diff : diff})`,
+          reason: reason,
+          isPenalty: diff < 0
+        });
+
+        saveTeamsData();
+        saveAuditLogs();
+        renderLeaderboard();
+        renderAuditLogs();
+        playSynthSound(diff >= 0 ? 'point' : 'click');
+        showToast(`${team.name} total score set to ${team.points} points!`);
+      } else {
+        addPointsDirectly(teamId, pts, reason);
+      }
+
+      closeCustomPointsModal();
+    }
+
+    // -------------------------------------------------------------
+    // 7. MULTI-SQUAD CUSTOM POINTS ALLOCATOR
+    // -------------------------------------------------------------
+    function populateBulkTeamsCheckboxes() {
+      const container = document.getElementById('bulkTeamsCheckboxList');
+      if (!container) return;
+      container.innerHTML = teamsData.map(t => `
+        <label class="bulk-team-chip" id="bulkChip_${t.id}">
+          <input type="checkbox" name="bulkTeamSelect" value="${t.id}" onchange="handleBulkChipToggle('${t.id}', this.checked)">
+          <span style="color: ${t.accent}; font-weight: 700; font-family: var(--font-mono);">${t.num}</span>
+          <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t.name}</span>
+        </label>
+      `).join('');
+      updateBulkSelectedCount();
+    }
+
+    function handleBulkChipToggle(teamId, isChecked) {
+      const chip = document.getElementById(`bulkChip_${teamId}`);
+      if (chip) chip.classList.toggle('selected', isChecked);
+      updateBulkSelectedCount();
+    }
+
+    function toggleSelectAllBulkTeams(selectAll) {
+      const checkboxes = document.querySelectorAll('input[name="bulkTeamSelect"]');
+      checkboxes.forEach(cb => {
+        cb.checked = selectAll;
+        const chip = document.getElementById(`bulkChip_${cb.value}`);
+        if (chip) chip.classList.toggle('selected', selectAll);
+      });
+      updateBulkSelectedCount();
+    }
+
+    function updateBulkSelectedCount() {
+      const selected = document.querySelectorAll('input[name="bulkTeamSelect"]:checked');
+      const countEl = document.getElementById('bulkSelectedCount');
+      if (countEl) countEl.textContent = selected.length;
+    }
+
+    function setBulkPointsInput(pts) {
+      const input = document.getElementById('bulkPointsInput');
+      if (input) input.value = pts;
+    }
+
+    function submitBulkPointsAllocation() {
+      const selectedCheckboxes = document.querySelectorAll('input[name="bulkTeamSelect"]:checked');
+      if (selectedCheckboxes.length === 0) {
+        alert('Please select at least one squad to allocate points.');
+        return;
+      }
+
+      const pts = parseInt(document.getElementById('bulkPointsInput').value, 10);
+      if (isNaN(pts) || pts === 0) {
+        alert('Please enter a valid non-zero points amount.');
+        return;
+      }
+
+      const reason = document.getElementById('bulkReasonInput').value.trim() || 'Custom Multi-Squad Points Allocation';
+      const selectedTeamIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+      const teamNames = [];
+
+      selectedTeamIds.forEach(id => {
+        const team = teamsData.find(t => t.id === id);
+        if (team) {
+          team.points += pts;
+          if (team.points < 0) team.points = 0;
+          teamNames.push(team.name);
+        }
+      });
+
+      // Log to audit feed
+      auditLogs.unshift({
+        time: new Date().toLocaleTimeString(),
+        team: `${selectedTeamIds.length} Squads (${teamNames.slice(0, 2).join(', ')}${teamNames.length > 2 ? '...' : ''})`,
+        change: (pts >= 0 ? `+${pts}` : `${pts}`) + " pts each",
+        reason: reason,
+        isPenalty: pts < 0
+      });
+
+      saveTeamsData();
+      saveAuditLogs();
+      renderLeaderboard();
+      renderAuditLogs();
+
+      playSynthSound(pts > 0 ? 'win' : 'click');
+      showToast(`Allocated ${pts >= 0 ? '+' + pts : pts} points to ${selectedTeamIds.length} squads!`);
+
+      // Reset reason input
+      document.getElementById('bulkReasonInput').value = '';
+    }
+
+    function renderAuditLogs() {
+      const container = document.getElementById('auditLogContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (auditLogs.length === 0) {
+        container.innerHTML = `<div style="text-align: center; color: var(--text-faint); padding: 20px; font-size: 12px;">No activity logs recorded yet.</div>`;
+        return;
+      }
+
+      auditLogs.slice(0, 30).forEach(log => {
+        const item = document.createElement('div');
+        item.className = `log-item ${log.isPenalty ? 'penalty' : ''}`;
+        item.innerHTML = `
+          <div class="log-item-header">
+            <span class="log-team-tag">${log.team}</span>
+            <span style="color: ${log.isPenalty ? '#FB7185' : '#34D399'}; font-weight: 700;">${log.change}</span>
+          </div>
+          <div class="log-reason">${log.reason}</div>
+          <div class="log-time-tag" style="margin-top: 4px; text-align: right;">${log.time}</div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function clearAuditLogs() {
+      if (confirm('Clear the live activity audit logs?')) {
+        auditLogs = [];
+        saveAuditLogs();
+        renderAuditLogs();
+        showToast('Audit logs cleared.');
+      }
+    }
+
+    // -------------------------------------------------------------
+    // 8. EVENT TRACK MATRIX SCORER (Podium 1st/2nd/3rd only)
+    // -------------------------------------------------------------
+    function populateEventScorerDropdowns() {
+      const trackSelect = document.getElementById('eventScorerSelect');
+      trackSelect.innerHTML = OFFICIAL_TRACKS.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+
+      const p1 = document.getElementById('scorerPlace1');
+      const p2 = document.getElementById('scorerPlace2');
+      const p3 = document.getElementById('scorerPlace3');
+
+      const teamOptions = teamsData.map(t => `<option value="${t.id}">${t.name} (${t.num})</option>`).join('');
+
+      p1.innerHTML = `<option value="">-- Select 1st Place (+100) --</option>` + teamOptions;
+      p2.innerHTML = `<option value="">-- Select 2nd Place (+70) --</option>` + teamOptions;
+      p3.innerHTML = `<option value="">-- Select 3rd Place (+40) --</option>` + teamOptions;
+    }
+
+    function handleEventScorerChange() {
+      // Clear selections on event track switch
+      document.getElementById('scorerPlace1').value = '';
+      document.getElementById('scorerPlace2').value = '';
+      document.getElementById('scorerPlace3').value = '';
+    }
+
+    function submitEventScorerPodium() {
+      const trackId = document.getElementById('eventScorerSelect').value;
+      const trackObj = OFFICIAL_TRACKS.find(t => t.id === trackId);
+      const trackName = trackObj ? trackObj.name : "Competition Track";
+
+      const p1Id = document.getElementById('scorerPlace1').value;
+      const p2Id = document.getElementById('scorerPlace2').value;
+      const p3Id = document.getElementById('scorerPlace3').value;
+
+      if (!p1Id) {
+        alert('Please select at least the 1st Place squad to commit event scoring.');
+        return;
+      }
+
+      // Check for duplicate squad selections
+      const selected = [p1Id, p2Id, p3Id].filter(Boolean);
+      const unique = new Set(selected);
+      if (selected.length !== unique.size) {
+        alert('A team cannot hold multiple podium positions in the same track!');
+        return;
+      }
+
+      // Award 1st Place (+100)
+      if (p1Id) {
+        const t1 = teamsData.find(t => t.id === p1Id);
+        if (t1) t1.points += 100;
+        auditLogs.unshift({ time: new Date().toLocaleTimeString(), team: t1.name, change: "+100 pts", reason: `🥇 1st Place: ${trackName}`, isPenalty: false });
+      }
+
+      // Award 2nd Place (+70)
+      if (p2Id) {
+        const t2 = teamsData.find(t => t.id === p2Id);
+        if (t2) t2.points += 70;
+        auditLogs.unshift({ time: new Date().toLocaleTimeString(), team: t2.name, change: "+70 pts", reason: `🥈 2nd Place: ${trackName}`, isPenalty: false });
+      }
+
+      // Award 3rd Place (+40)
+      if (p3Id) {
+        const t3 = teamsData.find(t => t.id === p3Id);
+        if (t3) t3.points += 40;
+        auditLogs.unshift({ time: new Date().toLocaleTimeString(), team: t3.name, change: "+40 pts", reason: `🥉 3rd Place: ${trackName}`, isPenalty: false });
+      }
+
+      saveTeamsData();
+      saveAuditLogs();
+      renderLeaderboard();
+      renderAuditLogs();
+
+      playSynthSound('win');
+      showToast(`🏆 ${trackName} podium scores committed: 1st (+100), 2nd (+70), 3rd (+40)!`);
+
+      // Reset dropdowns
+      handleEventScorerChange();
+    }
+
+    async function confirmResetAllPoints() {
+      if (confirm('⚠️ WARNING: This will reset all 11 squad scores to ZERO. Do you wish to continue?')) {
+        teamsData.forEach(t => t.points = 0);
+        auditLogs.unshift({
+          time: new Date().toLocaleTimeString(),
+          team: "ALL 11 SQUADS",
+          change: "RESET",
+          reason: "Administrative points reset to 0",
+          isPenalty: true
+        });
+        saveTeamsData();
+        saveAuditLogs();
+        renderLeaderboard();
+        renderAuditLogs();
+
+        // Dispatch reset to Django REST Backend
+        if (DJANGO_API_BASE_URL) {
+          try {
+            await fetch(`${DJANGO_API_BASE_URL}/scores/reset/`, { method: 'POST' });
+          } catch (djErr) {}
+        }
+
+        showToast('All scores have been reset to zero.');
+      }
+    }
+
+    // -------------------------------------------------------------
+    // 9. TEAM PROFILE DRILL-DOWN MODAL
+    // -------------------------------------------------------------
+    function openTeamProfileModal(teamId) {
+      const team = teamsData.find(t => t.id === teamId);
+      if (!team) return;
+
+      document.getElementById('profileTeamName').innerHTML = `
+        <span style="color: ${team.accent};">${team.num}</span> &middot; ${team.name}
+      `;
+
+      const content = document.getElementById('profileTeamContent');
+      content.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px;">
+          <!-- Captain Card -->
+          <div style="background: rgba(5,8,17,0.7); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; text-align: center;">
+            <span style="display: inline-block; font-size: 10px; font-family: var(--font-mono); color: #F59E0B; background: rgba(245,158,11,0.15); padding: 2px 8px; border-radius: 99px; margin-bottom: 8px;">
+              <i class="fa-solid fa-crown"></i> Team Captain
+            </span>
+            <img src="${team.captainImg}" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin: 0 auto 8px; display: block; border: 2px solid #F59E0B;"
+              onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(team.captain)}&background=0F172A&color=F59E0B&size=150'">
+            <h4 style="font-size: 14px; color: #FFF; font-weight: 700;">${team.captain}</h4>
+            <a href="tel:${team.captainPhone}" style="color: #38BDF8; font-size: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
+              <i class="fa-solid fa-phone"></i> ${team.captainPhone}
+            </a>
+          </div>
+
+          <!-- Vice Captain Card -->
+          <div style="background: rgba(5,8,17,0.7); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; text-align: center;">
+            <span style="display: inline-block; font-size: 10px; font-family: var(--font-mono); color: #38BDF8; background: rgba(56,189,248,0.15); padding: 2px 8px; border-radius: 99px; margin-bottom: 8px;">
+              <i class="fa-solid fa-shield-cat"></i> Vice Captain
+            </span>
+            <img src="${team.viceCaptainImg}" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin: 0 auto 8px; display: block; border: 2px solid #38BDF8;"
+              onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(team.viceCaptain)}&background=0F172A&color=38BDF8&size=150'">
+            <h4 style="font-size: 14px; color: #FFF; font-weight: 700;">${team.viceCaptain}</h4>
+            <a href="tel:${team.viceCaptainPhone}" style="color: #38BDF8; font-size: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
+              <i class="fa-solid fa-phone"></i> ${team.viceCaptainPhone}
+            </a>
+          </div>
+        </div>
+
+        <div style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+          <div>
+            <div style="font-size: 11.5px; color: var(--text-muted); font-family: var(--font-mono);">CURRENT TALLY</div>
+            <div style="font-size: 26px; font-weight: 800; font-family: var(--font-display); color: #FFF;">${team.points} PTS</div>
+          </div>
+          <button class="btn-action btn-action-emerald" onclick="closeTeamProfileModal(); openCustomPointsModal('${team.id}');">
+            <i class="fa-solid fa-pen-to-square"></i> Edit / Add Points
+          </button>
+        </div>
+      `;
+
+      document.getElementById('teamProfileModal').classList.add('active');
+    }
+
+    function closeTeamProfileModal() {
+      document.getElementById('teamProfileModal').classList.remove('active');
+    }
+
+    // -------------------------------------------------------------
+    // 10. EXPORT & UTILITIES
+    // -------------------------------------------------------------
+    function exportData(format = 'csv') {
+      if (format === 'csv') {
+        let csv = "Rank,Squad ID,Team Name,Captain,Vice Captain,Total Points\n";
+        const sorted = [...teamsData].sort((a, b) => b.points - a.points);
+        sorted.forEach((t, i) => {
+          csv += `${i + 1},"${t.num}","${t.name}","${t.captain}","${t.viceCaptain}",${t.points}\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', `inspire_2026_leaderboard_${new Date().toISOString().slice(0, 10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showToast('CSV export downloaded.');
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast-notification');
+      document.getElementById('toastMessage').textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    // -------------------------------------------------------------
+    // 11. CROSS-TAB LIVE SYNCHRONIZATION LISTENER
+    // -------------------------------------------------------------
+    if (syncChannel) {
+      syncChannel.onmessage = (event) => {
+        if (event.data && event.data.type === 'TEAMS_UPDATE') {
+          teamsData = event.data.data;
+          renderLeaderboard();
+        }
+      };
+    }
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === LS_KEY_TEAMS) {
+        try {
+          teamsData = JSON.parse(e.newValue);
+          renderLeaderboard();
+        } catch (err) { }
+      }
+    });
+
+    // -------------------------------------------------------------
+    // INITIALIZATION RUNNER
+    // -------------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', () => {
+      loadData();
+      checkAuthStatus();
+      populateEventScorerDropdowns();
+      populateBulkTeamsCheckboxes();
+      renderLeaderboard();
+      renderAuditLogs();
+
+      // Immediately fetch latest live scores from Google Cloud
+      fetchScoresFromCloud(true);
+
+      // Auto-sync polling every 8 seconds for multi-admin devices
+      setInterval(() => fetchScoresFromCloud(true), 8000);
+    });
+  </script>
+</body>
+
+</html>
