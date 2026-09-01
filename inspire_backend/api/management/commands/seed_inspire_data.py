@@ -51,7 +51,7 @@ class Command(BaseCommand):
             {"event_id": "typing-marathon", "name": "Typing Marathon", "category": "Technical", "format_type": "Individual", "team_size": 1, "venue": "II Floor Lab – Annex Block", "time": "11:15 AM – 12:15 PM"},
             {"event_id": "free-fire", "name": "Free Fire", "category": "Gaming", "format_type": "Team of 4", "team_size": 4, "venue": "Room No 216 – Annex Block", "time": "12:45 PM – 02:00 PM"},
             {"event_id": "bgmi", "name": "BGMI", "category": "Gaming", "format_type": "Team of 4", "team_size": 4, "venue": "Room No 217 – Annex Block", "time": "10:30 AM – 12:00 PM"},
-            {"event_id": "fashion-walk", "name": "Fashion Walk", "category": "Creative", "format_type": "Team of 4", "team_size": 4, "venue": "APJ Abdul Kalam Auditorium – Admin Block", "time": "02:45 PM – 03:30 PM"}
+            {"event_id": "debate", "name": "Debate", "category": "Corporate", "format_type": "Team of 4", "team_size": 4, "venue": "Seminar Hall – Annex Block", "time": "01:00 PM – 02:25 PM"}
         ]
 
         # Clean old tracks if needed
