@@ -52,15 +52,15 @@ git push -u origin main --force
 
 ## 🔗 Step 3: Connect Your Live Render URL to Your Website
 
-Once Render finishes deploying, it will give you a public URL (e.g. `https://inspire-backend-xxxx.onrender.com`).
+Your live backend URL is: `https://inspire-zg1p.onrender.com/api`
 
-1. Open [`index.html`](file:///c:/Users/user/Desktop/Inspire--main/index.html) and update line ~8603:
+1. In [`index.html`](file:///c:/Users/user/Desktop/Inspire--main/index.html) (Line 8567):
    ```javascript
-   const DJANGO_API_BASE_URL = "https://inspire-backend-xxxx.onrender.com/api";
+   const DJANGO_API_BASE_URL = "https://inspire-zg1p.onrender.com/api";
    ```
-2. Open [`admin.html`](file:///c:/Users/user/Desktop/Inspire--main/admin.html) and update line ~2157:
+2. In [`admin.html`](file:///c:/Users/user/Desktop/Inspire--main/admin.html) (Line 2157):
    ```javascript
-   const DJANGO_API_BASE_URL = "https://inspire-backend-xxxx.onrender.com/api";
+   const DJANGO_API_BASE_URL = "https://inspire-zg1p.onrender.com/api";
    ```
 3. Push the updated HTML files to GitHub:
    ```bash
