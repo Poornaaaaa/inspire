@@ -1587,6 +1587,10 @@
           <i class="fa-solid fa-cloud-arrow-up"></i> <span>Sync Cloud</span>
         </button>
 
+        <button class="btn-action btn-action-emerald" onclick="forceCommitAndBroadcast()" title="Commit all scores and broadcast immediately to live leaderboard">
+          <i class="fa-solid fa-cloud-arrow-up"></i> Commit Points Live
+        </button>
+
         <button class="btn-action btn-action-outline" onclick="toggleSoundFx()" id="soundToggleBtn"
           title="Toggle UI Synthesizer Sound FX">
           <i class="fa-solid fa-volume-high"></i> <span id="soundStatusText">Sound: ON</span>
@@ -1670,13 +1674,13 @@
       <div class="content-card">
         <div class="content-header">
           <div class="content-title-group">
-            <h3><i class="fa-solid fa-ranking-star" style="color: var(--corporate-amber);"></i> 11 Competing Squads
-              Leaderboard</h3>
-            <p>Live sorted standings. Click quick <strong>+10, +25, +50, +100</strong> buttons or <strong>Custom</strong>
-              to adjust team scores.</p>
+            <h3><i class="fa-solid fa-ranking-star" style="color: var(--corporate-amber);"></i> 11 Competing Squads Leaderboard</h3>
+            <p>Live sorted standings. Click quick <strong>+10, +25, +50, +100</strong> buttons or <strong>Custom</strong> to commit points.</p>
           </div>
-          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);">
-            <i class="fa-solid fa-users"></i> 11 Registered Teams
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button class="btn-action btn-action-emerald" style="padding: 6px 14px; font-size: 12px;" onclick="forceCommitAndBroadcast()" title="Commit and sync all points to live public site">
+              <i class="fa-solid fa-check-double"></i> Commit Points
+            </button>
           </div>
         </div>
 
@@ -1781,7 +1785,7 @@
           </div>
 
           <button class="btn-award-all" style="background: linear-gradient(135deg, #10B981, #059669);" onclick="submitBulkPointsAllocation()">
-            <i class="fa-solid fa-paper-plane"></i> Award Points to Selected Squads
+            <i class="fa-solid fa-check-double"></i> Commit Points to Selected Squads
           </button>
         </div>
 
@@ -1885,7 +1889,7 @@
         <div style="display: flex; gap: 10px; margin-top: 24px;">
           <button type="button" class="btn-action btn-action-outline" style="flex: 1;"
             onclick="closeCustomPointsModal()">Cancel</button>
-          <button type="submit" class="btn-action btn-action-emerald" style="flex: 1;">Save &amp; Broadcast</button>
+          <button type="submit" class="btn-action btn-action-emerald" style="flex: 1;"><i class="fa-solid fa-check-double"></i> Commit Point Adjustment</button>
         </div>
       </form>
     </div>
@@ -2306,6 +2310,12 @@
       syncScoresToCloud();
     }
 
+    async function forceCommitAndBroadcast() {
+      playSynthSound('win');
+      saveTeamsData(true);
+      showToast("⚡ All points committed & live broadcast published to public leaderboard!");
+    }
+
     // -------------------------------------------------------------
     // 2. AUDIO SYNTHESIZER FEEDBACK (Web Audio API)
     // -------------------------------------------------------------
@@ -2632,13 +2642,13 @@
           </div>
 
           <div class="team-quick-actions">
-            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 5, 'Quick +5')" title="Add +5 pts">+5</button>
-            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 10, 'Quick +10')" title="Add +10 pts">+10</button>
-            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 20, 'Quick +20')" title="Add +20 pts">+20</button>
-            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 25, 'Quick +25')" title="Add +25 pts">+25</button>
-            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 50, 'Quick +50')" title="Add +50 pts">+50</button>
-            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 100, 'Major Win +100')" title="Add +100 pts">+100</button>
-            <button class="btn-pt btn-pt-custom" onclick="openCustomPointsModal('${team.id}')" title="Custom Points & Edit Score">
+            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 5, 'Quick +5')" title="Commit +5 pts to ${team.name}">+5</button>
+            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 10, 'Quick +10')" title="Commit +10 pts to ${team.name}">+10</button>
+            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 20, 'Quick +20')" title="Commit +20 pts to ${team.name}">+20</button>
+            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 25, 'Quick +25')" title="Commit +25 pts to ${team.name}">+25</button>
+            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 50, 'Quick +50')" title="Commit +50 pts to ${team.name}">+50</button>
+            <button class="btn-pt" onclick="addPointsDirectly('${team.id}', 100, 'Major Win +100')" title="Commit +100 pts to ${team.name}">+100</button>
+            <button class="btn-pt btn-pt-custom" onclick="openCustomPointsModal('${team.id}')" title="Commit Custom Points & Edit Score">
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
           </div>
@@ -2686,7 +2696,7 @@
       renderAuditLogs();
 
       playSynthSound(amount > 0 ? 'point' : 'click');
-      showToast(`${team.name} updated: ${amount >= 0 ? '+' + amount : amount} points!`);
+      showToast(`🏆 Committed ${amount >= 0 ? '+' + amount : amount} points to ${team.name}!`);
     }
 
     let currentPointOpMode = 'adjust';
@@ -2766,7 +2776,7 @@
         renderLeaderboard();
         renderAuditLogs();
         playSynthSound(diff >= 0 ? 'point' : 'click');
-        showToast(`${team.name} total score set to ${team.points} points!`);
+        showToast(`🏆 Committed ${team.name} total score to ${team.points} points!`);
       } else {
         addPointsDirectly(teamId, pts, reason);
       }
@@ -2858,7 +2868,7 @@
       renderAuditLogs();
 
       playSynthSound(pts > 0 ? 'win' : 'click');
-      showToast(`Allocated ${pts >= 0 ? '+' + pts : pts} points to ${selectedTeamIds.length} squads!`);
+      showToast(`🏆 Committed & allocated ${pts >= 0 ? '+' + pts : pts} points to ${selectedTeamIds.length} squads!`);
 
       // Reset reason input
       document.getElementById('bulkReasonInput').value = '';
@@ -2972,7 +2982,7 @@
       renderAuditLogs();
 
       playSynthSound('win');
-      showToast(`🏆 ${trackName} podium scores committed: 1st (+100), 2nd (+70), 3rd (+40)!`);
+      showToast(`🏆 ${trackName} podium scores committed & broadcast: 1st (+100), 2nd (+70), 3rd (+40)!`);
 
       // Reset dropdowns
       handleEventScorerChange();
@@ -3000,7 +3010,7 @@
           } catch (djErr) {}
         }
 
-        showToast('All scores have been reset to zero.');
+        showToast('⚠️ All scores have been reset to zero and committed.');
       }
     }
 
