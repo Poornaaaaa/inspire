@@ -7167,7 +7167,7 @@
             </div>
           </div>
 
-          <!-- 6. YEAR (I, II, III) & 7. CLASS / COURSE -->
+          <!-- 6. YEAR (I, II) & 7. CLASS / COURSE -->
           <div class="form-row">
             <div class="form-group">
               <label class="form-label"><i class="fa-solid fa-calendar-days" style="color: var(--corporate-amber);"></i>
@@ -7176,7 +7176,6 @@
                 <option value="" disabled selected>-- Select Academic Year --</option>
                 <option value="Year I">Year I</option>
                 <option value="Year II">Year II</option>
-                <option value="Year III">Year III</option>
               </select>
             </div>
             <div class="form-group">
@@ -8865,27 +8864,35 @@
     // LIVE COUNTDOWN TIMER TO SEPTEMBER 10, 2026
     // -------------------------------------------------------------
     function updateCountdown() {
-      const target = new Date("2026-09-10T09:00:00+05:30").getTime();
+      // Event Target: September 10, 2026 00:00:00 IST
+      const target = new Date("2026-09-10T00:00:00+05:30").getTime();
       const now = new Date().getTime();
       const diff = target - now;
 
+      const cdDays = document.getElementById('cdDays');
+      const cdHours = document.getElementById('cdHours');
+      const cdMins = document.getElementById('cdMins');
+      const cdSecs = document.getElementById('cdSecs');
+
+      if (!cdDays || !cdHours || !cdMins || !cdSecs) return;
+
       if (diff <= 0) {
-        document.getElementById('cdDays').textContent = "00";
-        document.getElementById('cdHours').textContent = "00";
-        document.getElementById('cdMins').textContent = "00";
-        document.getElementById('cdSecs').textContent = "00";
+        cdDays.textContent = "00";
+        cdHours.textContent = "00";
+        cdMins.textContent = "00";
+        cdSecs.textContent = "00";
         return;
       }
 
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60)) / (1000 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-      document.getElementById('cdDays').textContent = String(days).padStart(2, '0');
-      document.getElementById('cdHours').textContent = String(hours).padStart(2, '0');
-      document.getElementById('cdMins').textContent = String(minutes).padStart(2, '0');
-      document.getElementById('cdSecs').textContent = String(seconds).padStart(2, '0');
+      cdDays.textContent = String(days).padStart(2, '0');
+      cdHours.textContent = String(hours).padStart(2, '0');
+      cdMins.textContent = String(minutes).padStart(2, '0');
+      cdSecs.textContent = String(seconds).padStart(2, '0');
     }
 
     setInterval(updateCountdown, 1000);

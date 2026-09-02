@@ -50,7 +50,7 @@ def run_e2e_verification():
         "participants": "Pavan S, Asim Khan",
         "phone": "+91 98765 43210",
         "email": "pavan@claretcollege.edu.in",
-        "year": "Year III",
+        "year": "Year II",
         "course": "BCA",
         "section": "Section B",
         "rollNo": "23BCA102",
