@@ -307,7 +307,7 @@ function sendDelegatePassEmail(recipientEmail, info) {
     <div style="font-family: Arial, sans-serif; background-color: #0B101D; color: #F8FAFC; padding: 24px; border-radius: 12px; max-width: 600px; margin: 0 auto; border: 1px solid #1E293B;">
       <div style="text-align: center; margin-bottom: 20px;">
         <h1 style="color: #F59E0B; margin: 0; font-size: 24px; letter-spacing: 2px;">INSPIRE 2026</h1>
-        <p style="color: #94A3B8; margin: 4px 0 0 0; font-size: 13px;">ANNUAL INTRA-DEPARTMENT IT EXTRAVAGANZA</p>
+        <p style="color: #94A3B8; margin: 4px 0 0 0; font-size: 13px;">ANNUAL INTRA COLLEGIATE TECH FEST</p>
       </div>
 
       <div style="background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(99,102,241,0.15)); border: 1px solid rgba(245,158,11,0.4); border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 20px;">
@@ -348,7 +348,7 @@ function sendDelegatePassEmail(recipientEmail, info) {
       </div>
 
       <div style="text-align: center; margin-top: 20px; font-size: 11px; color: #64748B;">
-        Inspire 2026 Organizing Committee &middot; Department of Computer Applications
+        Inspire 2026 Organizing Committee &middot; Department of Computer Applications-UG
       </div>
     </div>
   `;

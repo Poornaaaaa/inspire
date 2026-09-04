@@ -190,10 +190,27 @@
     }
 
     @keyframes loginShake {
-      10%, 90% { transform: translate3d(-2px, 0, 0); }
-      20%, 80% { transform: translate3d(4px, 0, 0); }
-      30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
-      40%, 60% { transform: translate3d(6px, 0, 0); }
+
+      10%,
+      90% {
+        transform: translate3d(-2px, 0, 0);
+      }
+
+      20%,
+      80% {
+        transform: translate3d(4px, 0, 0);
+      }
+
+      30%,
+      50%,
+      70% {
+        transform: translate3d(-6px, 0, 0);
+      }
+
+      40%,
+      60% {
+        transform: translate3d(6px, 0, 0);
+      }
     }
 
     .form-group {
@@ -1607,11 +1624,13 @@
           <span id="syncStatusText">CLOUD SYNC ACTIVE</span>
         </div>
 
-        <button class="btn-action btn-action-outline" onclick="forceCloudSync()" title="Push latest scores to all devices via Google Cloud">
+        <button class="btn-action btn-action-outline" onclick="forceCloudSync()"
+          title="Push latest scores to all devices via Google Cloud">
           <i class="fa-solid fa-cloud-arrow-up"></i> <span>Sync Cloud</span>
         </button>
 
-        <button class="btn-action btn-action-emerald" onclick="forceCommitAndBroadcast()" title="Commit all scores and broadcast immediately to live leaderboard">
+        <button class="btn-action btn-action-emerald" onclick="forceCommitAndBroadcast()"
+          title="Commit all scores and broadcast immediately to live leaderboard">
           <i class="fa-solid fa-cloud-arrow-up"></i> Commit Points Live
         </button>
 
@@ -1628,7 +1647,8 @@
           <i class="fa-solid fa-file-csv"></i> Export CSV
         </button>
 
-        <button class="btn-action btn-action-outline" onclick="confirmResetAllPoints()" title="Reset all 11 squad scores to zero">
+        <button class="btn-action btn-action-outline" onclick="confirmResetAllPoints()"
+          title="Reset all 11 squad scores to zero">
           <i class="fa-solid fa-rotate-left"></i> Reset All
         </button>
 
@@ -1698,11 +1718,15 @@
       <div class="content-card">
         <div class="content-header">
           <div class="content-title-group">
-            <h3><i class="fa-solid fa-ranking-star" style="color: var(--corporate-amber);"></i> 11 Competing Squads Leaderboard</h3>
-            <p>Live sorted standings. Click quick <strong>+10, +25, +50, +100</strong> buttons or <strong>Custom</strong> to commit points.</p>
+            <h3><i class="fa-solid fa-ranking-star" style="color: var(--corporate-amber);"></i> 11 Competing Squads
+              Leaderboard</h3>
+            <p>Live sorted standings. Click quick <strong>+10, +25, +50, +100</strong> buttons or
+              <strong>Custom</strong> to commit points.
+            </p>
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
-            <button class="btn-action btn-action-emerald" style="padding: 6px 14px; font-size: 12px;" onclick="forceCommitAndBroadcast()" title="Commit and sync all points to live public site">
+            <button class="btn-action btn-action-emerald" style="padding: 6px 14px; font-size: 12px;"
+              onclick="forceCommitAndBroadcast()" title="Commit and sync all points to live public site">
               <i class="fa-solid fa-check-double"></i> Commit Points
             </button>
           </div>
@@ -1764,14 +1788,16 @@
         <div class="bulk-scorer-box">
           <div class="content-header" style="margin-bottom: 14px;">
             <div class="content-title-group">
-              <h3><i class="fa-solid fa-users-gear" style="color: var(--corporate-emerald);"></i> Allocate Points to Specific Squads</h3>
+              <h3><i class="fa-solid fa-users-gear" style="color: var(--corporate-emerald);"></i> Allocate Points to
+                Specific Squads</h3>
               <p>Select which squads receive points &amp; specify exact custom points.</p>
             </div>
           </div>
 
           <!-- Target Squads Selection Chips/Checkboxes -->
           <div class="bulk-team-selection-header">
-            <label class="form-label" style="margin-bottom: 0;">Select Target Squads (<span id="bulkSelectedCount">0</span> selected)</label>
+            <label class="form-label" style="margin-bottom: 0;">Select Target Squads (<span
+                id="bulkSelectedCount">0</span> selected)</label>
             <div class="bulk-select-toggle-actions">
               <button type="button" class="btn-bulk-toggle" onclick="toggleSelectAllBulkTeams(true)">Select All</button>
               <button type="button" class="btn-bulk-toggle" onclick="toggleSelectAllBulkTeams(false)">Clear All</button>
@@ -1795,7 +1821,8 @@
             </div>
             <div class="input-wrapper" style="margin-top: 6px;">
               <i class="fa-solid fa-plus-minus input-icon"></i>
-              <input type="number" class="form-control" id="bulkPointsInput" placeholder="Points amount (e.g. 10, 20, -5)" value="10" required>
+              <input type="number" class="form-control" id="bulkPointsInput"
+                placeholder="Points amount (e.g. 10, 20, -5)" value="10" required>
             </div>
           </div>
 
@@ -1804,11 +1831,13 @@
             <label class="form-label">Event Track / Reason</label>
             <div class="input-wrapper">
               <i class="fa-solid fa-tag input-icon"></i>
-              <input type="text" class="form-control" id="bulkReasonInput" placeholder="e.g. Round 1 Participation, Bonus Points, Quiz Qualifier" required>
+              <input type="text" class="form-control" id="bulkReasonInput"
+                placeholder="e.g. Round 1 Participation, Bonus Points, Quiz Qualifier" required>
             </div>
           </div>
 
-          <button class="btn-award-all" style="background: linear-gradient(135deg, #10B981, #059669);" onclick="submitBulkPointsAllocation()">
+          <button class="btn-award-all" style="background: linear-gradient(135deg, #10B981, #059669);"
+            onclick="submitBulkPointsAllocation()">
             <i class="fa-solid fa-check-double"></i> Commit Points to Selected Squads
           </button>
         </div>
@@ -1817,7 +1846,8 @@
         <div class="audit-log-box">
           <div class="content-header" style="margin-bottom: 12px;">
             <div class="content-title-group">
-              <h3><i class="fa-solid fa-list-check" style="color: var(--corporate-cyan);"></i> Live Points Audit Feed</h3>
+              <h3><i class="fa-solid fa-list-check" style="color: var(--corporate-cyan);"></i> Live Points Audit Feed
+              </h3>
               <p>Chronological log of all score modifications.</p>
             </div>
             <button class="btn-pt" onclick="clearAuditLogs()" style="font-size: 11px; padding: 3px 8px;">Clear</button>
@@ -1828,11 +1858,13 @@
           </div>
         </div>
 
-        <div style="text-align: center; margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 12.5px; color: var(--text-faint);">
-          <span>© 2026 Dept of Computer Science &middot; St. Claret College</span> &nbsp;|&nbsp;
+        <div
+          style="text-align: center; margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 12.5px; color: var(--text-faint);">
+          <span>© 2026 Department of Computer Applications-UG &middot; St. Claret College</span> &nbsp;|&nbsp;
           <span style="display: inline-flex; align-items: center; gap: 5px;">
             <i class="fa-solid fa-code" style="color: var(--corporate-amber);"></i>
-            Created by &ndash; <strong style="color: #F59E0B;">Likhith g p</strong> and <strong style="color: #818CF8;">Poornachandra B</strong>
+            Created by &ndash; <strong style="color: #F59E0B;">Likhith g p</strong> and <strong
+              style="color: #818CF8;">Poornachandra B</strong>
           </span>
         </div>
 
@@ -1857,19 +1889,24 @@
         <input type="hidden" id="modalTeamId">
 
         <div style="margin-bottom: 12px;">
-          <label class="form-label">Current Squad Score: <strong id="modalCurrentPointsBadge" style="color: #34D399; font-size: 16px;">0 pts</strong></label>
+          <label class="form-label">Current Squad Score: <strong id="modalCurrentPointsBadge"
+              style="color: #34D399; font-size: 16px;">0 pts</strong></label>
         </div>
 
         <!-- Mode: Add/Subtract vs Set Direct Score -->
         <div class="form-group" style="margin-bottom: 12px;">
           <label class="form-label">Operation Mode</label>
           <div style="display: flex; gap: 10px;">
-            <label style="display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: #FFF; cursor: pointer;">
-              <input type="radio" name="pointOpMode" value="adjust" checked onchange="togglePointOpMode(this.value)" style="accent-color: var(--corporate-emerald);">
+            <label
+              style="display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: #FFF; cursor: pointer;">
+              <input type="radio" name="pointOpMode" value="adjust" checked onchange="togglePointOpMode(this.value)"
+                style="accent-color: var(--corporate-emerald);">
               <span>Add / Deduct (+/-)</span>
             </label>
-            <label style="display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: #FFF; cursor: pointer;">
-              <input type="radio" name="pointOpMode" value="set" onchange="togglePointOpMode(this.value)" style="accent-color: var(--corporate-emerald);">
+            <label
+              style="display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: #FFF; cursor: pointer;">
+              <input type="radio" name="pointOpMode" value="set" onchange="togglePointOpMode(this.value)"
+                style="accent-color: var(--corporate-emerald);">
               <span>Set Absolute Total Score (=)</span>
             </label>
           </div>
@@ -1886,7 +1923,8 @@
             <button type="button" class="btn-preset-pt" onclick="setModalPointInput(25)">+25</button>
             <button type="button" class="btn-preset-pt" onclick="setModalPointInput(50)">+50</button>
             <button type="button" class="btn-preset-pt" onclick="setModalPointInput(100)">+100</button>
-            <button type="button" class="btn-preset-pt" style="color: #FB7185; border-color: rgba(244, 63, 94, 0.3);" onclick="setModalPointInput(-10)">-10</button>
+            <button type="button" class="btn-preset-pt" style="color: #FB7185; border-color: rgba(244, 63, 94, 0.3);"
+              onclick="setModalPointInput(-10)">-10</button>
           </div>
         </div>
 
@@ -1896,7 +1934,8 @@
             <i class="fa-solid fa-plus-minus input-icon"></i>
             <input type="number" class="form-control" id="modalPointsValue" placeholder="e.g. 10 or -10" required>
           </div>
-          <span id="modalPointsHint" style="font-size: 11.5px; color: var(--text-faint); margin-top: 4px; display: block;">
+          <span id="modalPointsHint"
+            style="font-size: 11.5px; color: var(--text-faint); margin-top: 4px; display: block;">
             Enter positive value to add, negative value to deduct.
           </span>
         </div>
@@ -1913,7 +1952,8 @@
         <div style="display: flex; gap: 10px; margin-top: 24px;">
           <button type="button" class="btn-action btn-action-outline" style="flex: 1;"
             onclick="closeCustomPointsModal()">Cancel</button>
-          <button type="submit" class="btn-action btn-action-emerald" style="flex: 1;"><i class="fa-solid fa-check-double"></i> Commit Point Adjustment</button>
+          <button type="submit" class="btn-action btn-action-emerald" style="flex: 1;"><i
+              class="fa-solid fa-check-double"></i> Commit Point Adjustment</button>
         </div>
       </form>
     </div>
@@ -1943,7 +1983,8 @@
       <div class="modal-header">
         <div style="display: flex; align-items: center; gap: 10px;">
           <i class="fa-solid fa-key" style="color: var(--corporate-emerald); font-size: 18px;"></i>
-          <h3 style="font-family: var(--font-serif); font-size: 20px; color: #FFF; margin: 0;">Change Admin Credentials</h3>
+          <h3 style="font-family: var(--font-serif); font-size: 20px; color: #FFF; margin: 0;">Change Admin Credentials
+          </h3>
         </div>
         <button class="modal-close-btn" onclick="closeChangePasswordModal()">&times;</button>
       </div>
@@ -1963,8 +2004,10 @@
           </label>
           <div class="input-wrapper">
             <i class="fa-solid fa-lock input-icon"></i>
-            <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password" required autocomplete="current-password">
-            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('currentPassword', this)">
+            <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password"
+              required autocomplete="current-password">
+            <button type="button" class="password-toggle-btn"
+              onclick="togglePasswordVisibility('currentPassword', this)">
               <i class="fa-solid fa-eye"></i>
             </button>
           </div>
@@ -1986,7 +2029,8 @@
           </label>
           <div class="input-wrapper">
             <i class="fa-solid fa-lock input-icon"></i>
-            <input type="password" class="form-control" id="newPassword" placeholder="Minimum 6 characters" required minlength="6" autocomplete="new-password">
+            <input type="password" class="form-control" id="newPassword" placeholder="Minimum 6 characters" required
+              minlength="6" autocomplete="new-password">
             <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('newPassword', this)">
               <i class="fa-solid fa-eye"></i>
             </button>
@@ -1995,12 +2039,15 @@
 
         <div class="form-group">
           <label class="form-label">
-            <span><i class="fa-solid fa-circle-check" style="color: var(--corporate-emerald);"></i> Confirm New Password *</span>
+            <span><i class="fa-solid fa-circle-check" style="color: var(--corporate-emerald);"></i> Confirm New Password
+              *</span>
           </label>
           <div class="input-wrapper">
             <i class="fa-solid fa-lock input-icon"></i>
-            <input type="password" class="form-control" id="confirmPassword" placeholder="Re-enter new password" required minlength="6" autocomplete="new-password">
-            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('confirmPassword', this)">
+            <input type="password" class="form-control" id="confirmPassword" placeholder="Re-enter new password"
+              required minlength="6" autocomplete="new-password">
+            <button type="button" class="password-toggle-btn"
+              onclick="togglePasswordVisibility('confirmPassword', this)">
               <i class="fa-solid fa-eye"></i>
             </button>
           </div>
@@ -2343,7 +2390,7 @@
                 synced = true;
               }
             }
-          } catch (djErr) {}
+          } catch (djErr) { }
         }
 
         // 2. Secondary Fallback to Google Sheets
@@ -2469,7 +2516,8 @@
     // -------------------------------------------------------------
     const DEFAULT_ADMIN_ID = "admin";
     // Irreversible SHA-256 cryptographic digest of master admin password
-    const DEFAULT_ADMIN_PASS_HASH = "3c9bce422677b7891051127ddb31392481f22dedd2b75aa4cbf45669f0f3744b";
+    const DEFAULT_ADMIN_PASS_HASH = "9b065d48c15e08ede97fa8c8e34a2c61ff9a43b60bacc8ee5a1baa8dd23ca83f";
+    const PREV_ADMIN_PASS_HASH = "3c9bce422677b7891051127ddb31392481f22dedd2b75aa4cbf45669f0f3744b";
 
     function sha256Fallback(ascii) {
       function rightRotate(v, a) { return (v >>> a) | (v << (32 - a)); }
@@ -2550,6 +2598,12 @@
               const migrated = { id: parsed.id || DEFAULT_ADMIN_ID, passHash: hash };
               localStorage.setItem(LS_KEY_CREDS, JSON.stringify(migrated));
               return migrated;
+            }
+            // Auto-migrate previous default hash to new master password hash
+            if (parsed.passHash === PREV_ADMIN_PASS_HASH) {
+              const updated = { id: parsed.id || DEFAULT_ADMIN_ID, passHash: DEFAULT_ADMIN_PASS_HASH };
+              localStorage.setItem(LS_KEY_CREDS, JSON.stringify(updated));
+              return updated;
             }
             if (parsed.passHash) {
               return {
@@ -3227,7 +3281,7 @@
         if (DJANGO_API_BASE_URL) {
           try {
             await fetch(`${DJANGO_API_BASE_URL}/scores/reset/`, { method: 'POST' });
-          } catch (djErr) {}
+          } catch (djErr) { }
         }
 
         showToast('⚠️ All scores have been reset to zero and committed.');

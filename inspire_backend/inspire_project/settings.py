@@ -1,7 +1,7 @@
 """
 Django settings for inspire_project.
-Inspire 2026 - Intra-Department Tech Leadership Fest Backend
-St. Claret College · Department of Computer Science
+Inspire 2026 - Intra Collegiate Tech Fest Backend
+St. Claret College · Department of Computer Applications-UG
 Production Ready for Render.com (100% Free Cloud Web Service)
 """
 

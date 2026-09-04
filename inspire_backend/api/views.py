@@ -242,7 +242,7 @@ class AdminLoginAPIView(APIView):
         else:
             expected_hash = os.environ.get(
                 "ADMIN_PASSWORD_HASH",
-                "3c9bce422677b7891051127ddb31392481f22dedd2b75aa4cbf45669f0f3744b"
+                "9b065d48c15e08ede97fa8c8e34a2c61ff9a43b60bacc8ee5a1baa8dd23ca83f"
             )
 
         # Compute SHA-256 hash of provided password

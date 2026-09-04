@@ -85,7 +85,7 @@ class InspireAPITests(TestCase):
         # Valid credentials (hashed internally)
         res = self.client.post('/api/admin/login/', {
             "id": "admin",
-            "password": "Poorna@292004"
+            "password": "Panda@2121@"
         }, format='json')
         self.assertEqual(res.status_code, 200)
         self.assertTrue(res.data['authenticated'])
