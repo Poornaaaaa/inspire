@@ -80,3 +80,30 @@ class InspireAPITests(TestCase):
         self.assertEqual(res.status_code, 200)
         self.squad1.refresh_from_db()
         self.assertEqual(self.squad1.points, 0)
+
+    def test_admin_login_authenticated(self):
+        # Valid credentials (hashed internally)
+        res = self.client.post('/api/admin/login/', {
+            "id": "admin",
+            "password": "Poorna@292004"
+        }, format='json')
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(res.data['authenticated'])
+        self.assertEqual(res.data['status'], 'success')
+
+    def test_admin_login_invalid_credentials(self):
+        # Invalid password
+        res = self.client.post('/api/admin/login/', {
+            "id": "admin",
+            "password": "WrongPassword123"
+        }, format='json')
+        self.assertEqual(res.status_code, 401)
+        self.assertFalse(res.data['authenticated'])
+
+    def test_admin_login_missing_fields(self):
+        # Missing password
+        res = self.client.post('/api/admin/login/', {
+            "id": "admin"
+        }, format='json')
+        self.assertEqual(res.status_code, 400)
+

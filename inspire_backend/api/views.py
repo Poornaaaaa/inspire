@@ -1,3 +1,6 @@
+import os
+import hashlib
+import hmac
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -216,7 +219,7 @@ class RegistrationListAPIView(APIView):
 class AdminLoginAPIView(APIView):
     """
     POST /api/admin/login/
-    Validates administrator login credentials.
+    Validates administrator login credentials using secure SHA-256 cryptographic hashing.
     """
     permission_classes = [AllowAny]
 
@@ -224,8 +227,32 @@ class AdminLoginAPIView(APIView):
         admin_id = request.data.get('id', '').strip()
         admin_pass = request.data.get('password', '').strip()
 
-        # Default Fest Admin Credentials
-        if admin_id == "admin" and admin_pass == "Poorna@292004":
+        if not admin_id or not admin_pass:
+            return Response({
+                "status": "error",
+                "authenticated": False,
+                "message": "Admin ID and Password are required."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # Expected credentials from environment or encrypted default
+        expected_id = os.environ.get("ADMIN_ID", "admin")
+
+        if "ADMIN_PASSWORD" in os.environ:
+            expected_hash = hashlib.sha256(os.environ["ADMIN_PASSWORD"].encode('utf-8')).hexdigest()
+        else:
+            expected_hash = os.environ.get(
+                "ADMIN_PASSWORD_HASH",
+                "3c9bce422677b7891051127ddb31392481f22dedd2b75aa4cbf45669f0f3744b"
+            )
+
+        # Compute SHA-256 hash of provided password
+        provided_hash = hashlib.sha256(admin_pass.encode('utf-8')).hexdigest()
+
+        # Constant-time comparison to prevent timing attacks
+        id_valid = hmac.compare_digest(admin_id, expected_id)
+        pass_valid = hmac.compare_digest(provided_hash, expected_hash)
+
+        if id_valid and pass_valid:
             return Response({
                 "status": "success",
                 "authenticated": True,

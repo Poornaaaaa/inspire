@@ -69,7 +69,7 @@ Once running, your API is active at `http://127.0.0.1:8000/api/`.
 | `/api/scores/reset/` | `POST` | Reset all 11 squad points back to zero (0 PTS). |
 | `/api/register/` | `POST` | Register a delegate/team and receive ticket confirmation. |
 | `/api/registrations/` | `GET` | List registrations with optional filtering (`?event=...`, `?squad=...`, `?search=...`). |
-| `/api/admin/login/` | `POST` | Authenticate Fest Admin credentials (`admin` / `Poorna@292004`). |
+| `/api/admin/login/` | `POST` | Authenticate Fest Admin credentials with SHA-256 cryptographic verification (`ADMIN_ID` / `ADMIN_PASSWORD_HASH`). |
 | `/api/events/` | `GET` | Retrieve the 14 official competition tracks. |
 | `/admin/` | `GET` | Django GUI Administration dashboard. |
 
