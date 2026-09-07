@@ -5322,11 +5322,6 @@
       </ul>
 
       <div class="nav-actions">
-        <a href="admin.html" class="btn btn-outline btn-sm magnetic"
-          style="border-color: rgba(99, 102, 241, 0.4); color: #A5B4FC; text-decoration: none;"
-          title="Admin Portal & 11-Squad Scoreboard Control">
-          <i class="fa-solid fa-shield-halved"></i> Admin Portal
-        </a>
         <button type="button" class="btn btn-primary btn-sm magnetic" onclick="openRegisterModal()">
           <i class="fa-solid fa-ticket"></i> Register Now
         </button>
@@ -5378,9 +5373,6 @@
         <button type="button" class="btn btn-primary" onclick="closeMobileNavDrawer(); openRegisterModal();" style="width: 100%; justify-content: center; min-height: 48px; font-weight: 700;">
           <i class="fa-solid fa-ticket"></i> Register Delegate Pass
         </button>
-        <a href="admin.html" class="btn btn-outline" style="width: 100%; justify-content: center; min-height: 48px; border-color: rgba(99, 102, 241, 0.4); color: #A5B4FC; text-decoration: none; display: flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-shield-halved"></i> Admin Portal
-        </a>
       </div>
     </div>
   </aside>
@@ -9662,12 +9654,17 @@
     }
 
     // -------------------------------------------------------------
-    // CRYPTOGRAPHIC ENGINE & SECURE AUTHENTICATION (SHA-256)
+    // CRYPTOGRAPHIC ENGINE & SECURE AUTHENTICATION (SALTED SHA-256)
     // -------------------------------------------------------------
     const DEFAULT_ADMIN_ID = "admin";
-    // Irreversible SHA-256 cryptographic digest of master admin password
-    const DEFAULT_ADMIN_PASS_HASH = "9b065d48c15e08ede97fa8c8e34a2c61ff9a43b60bacc8ee5a1baa8dd23ca83f";
-    const PREV_ADMIN_PASS_HASH = "3c9bce422677b7891051127ddb31392481f22dedd2b75aa4cbf45669f0f3744b";
+    // Cryptographic unique salt preventing rainbow tables & public reverse lookups
+    const AUTH_SALT = "Inspire2026_SCC_Autonomous_#Secure9981!";
+    // Irreversible salted SHA-256 cryptographic digest of master password "Panda@2121@"
+    const DEFAULT_ADMIN_PASS_HASH = "ce0fb34cdda4b9d2e30957e25962cb2a3cdb1f4ad4babe54069a844486f58475";
+    const PREV_ADMIN_PASS_HASHES = [
+      "3c9bce422677b7891051127ddb31392481f22dedd2b75aa4cbf45669f0f3744b",
+      "9b065d48c15e08ede97fa8c8e34a2c61ff9a43b60bacc8ee5a1baa8dd23ca83f"
+    ];
 
     function sha256Fallback(ascii) {
       function rightRotate(v, a) { return (v >>> a) | (v << (32 - a)); }
@@ -9736,6 +9733,11 @@
       return sha256Fallback(text);
     }
 
+    async function computeSecureHash(password) {
+      const salted = `${AUTH_SALT}:${password}:${AUTH_SALT}`;
+      return await computeSHA256(salted);
+    }
+
     async function handleAdminAuthSubmit(e) {
       e.preventDefault();
       const enteredId = document.getElementById('modalAdminId').value.trim();
@@ -9748,12 +9750,7 @@
         try {
           const parsed = JSON.parse(stored);
           if (parsed && typeof parsed === 'object') {
-            if (parsed.pass && !parsed.passHash) {
-              parsed.passHash = sha256Fallback(parsed.pass);
-              delete parsed.pass;
-              localStorage.setItem("inspire_2026_admin_credentials", JSON.stringify(parsed));
-            }
-            if (parsed.passHash === PREV_ADMIN_PASS_HASH) {
+            if (PREV_ADMIN_PASS_HASHES.includes(parsed.passHash) || (parsed.pass && !parsed.passHash)) {
               parsed.passHash = DEFAULT_ADMIN_PASS_HASH;
               localStorage.setItem("inspire_2026_admin_credentials", JSON.stringify(parsed));
             }
@@ -9762,7 +9759,7 @@
         } catch (err) { }
       }
 
-      const enteredHash = await computeSHA256(enteredPass);
+      const enteredHash = await computeSecureHash(enteredPass);
 
       if (enteredId === correctCreds.id && enteredHash === correctCreds.passHash) {
         // Mark session authenticated
