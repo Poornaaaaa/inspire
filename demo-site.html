@@ -5113,8 +5113,8 @@
     <div class="container" style="max-width: 920px; margin: 0 auto; position: relative; z-index: 2;">
       <div class="reveal">
         <span
-          style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; border-radius: 999px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); font-family: var(--font-mono); font-size: 12px; color: #FBBF24; margin-bottom: 20px;">
-          <i class="fa-solid fa-bolt"></i> OFFICIAL REGISTRATION OPEN &middot; INSPIRE 2026
+          style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; border-radius: 999px; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); font-family: var(--font-mono); font-size: 12px; color: #F87171; margin-bottom: 20px;">
+          <i class="fa-solid fa-hourglass-end"></i> REGISTRATION CLOSED &middot; INSPIRE 2026
         </span>
         <h2
           style="font-family: var(--font-serif); font-size: clamp(32px, 5vw, 46px); font-weight: 700; color: #FFFFFF; line-height: 1.2; margin-bottom: 16px;">
@@ -5129,8 +5129,8 @@
         <div
           style="display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 36px;">
           <button class="btn btn-primary btn-lg magnetic" onclick="openRegisterModal()" id="finalRegisterCtaBtn"
-            style="padding: 16px 36px; font-size: 16px; box-shadow: 0 12px 35px -5px rgba(99, 102, 241, 0.5);">
-            <i class="fa-solid fa-ticket"></i> Open Official Registration Form
+            style="padding: 16px 36px; font-size: 16px; box-shadow: 0 12px 35px -5px rgba(239, 68, 68, 0.4); background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);">
+            <i class="fa-solid fa-ticket"></i> Registration Portal (Closed)
           </button>
           <a href="#events" class="btn btn-outline btn-lg magnetic" style="padding: 16px 30px; font-size: 15px;">
             <i class="fa-solid fa-layer-group"></i> Review 14 Tracks
@@ -5283,6 +5283,42 @@
           </button>
           <button class="btn btn-outline magnetic" onclick="closeRulesModal()" style="min-height: 48px;">Close</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL: REGISTRATION CLOSED NOTIFICATION
+       ========================================== -->
+  <div class="modal-overlay" id="registrationClosedModal" onclick="closeModalOnBackdrop(event, 'registrationClosedModal')">
+    <div class="modal-container" style="max-width: 480px; text-align: center; padding: 36px 28px; background: #0F172A; border: 1px solid rgba(239, 68, 68, 0.35); box-shadow: 0 25px 50px -12px rgba(239, 68, 68, 0.25);">
+      <div style="width: 72px; height: 72px; border-radius: 50%; background: rgba(239, 68, 68, 0.15); border: 2px solid rgba(239, 68, 68, 0.4); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #F87171; font-size: 32px; box-shadow: 0 0 25px rgba(239, 68, 68, 0.3);">
+        <i class="fa-solid fa-hourglass-end"></i>
+      </div>
+
+      <span class="event-num-tag" style="background: rgba(239, 68, 68, 0.15); color: #FCA5A5; border-color: rgba(239, 68, 68, 0.35); margin-bottom: 12px; display: inline-block;">
+        <i class="fa-solid fa-ban"></i> REGISTRATION PORTAL CLOSED
+      </span>
+
+      <h3 style="font-family: var(--font-serif); font-size: 26px; font-weight: 700; color: #FFFFFF; margin-top: 10px; margin-bottom: 12px; line-height: 1.3;">
+        Times Up! You Can't Register Now
+      </h3>
+
+      <p style="font-size: 15px; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px;">
+        Times up you cant register now. The registration window for Inspire 2026 has officially concluded. Delegate entries and track allocations are closed.
+      </p>
+
+      <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 24px; text-align: left; font-size: 13px; color: var(--text-muted);">
+        <div style="display: flex; align-items: center; gap: 8px; color: #FBBF24; font-weight: 600; margin-bottom: 4px;">
+          <i class="fa-solid fa-circle-info"></i> Registered Delegates
+        </div>
+        <div>Please present your verified Pass ID or College Roll Number at the Registration Desk on September 10, 2026.</div>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button type="button" class="btn btn-primary" onclick="closeRegistrationClosedModal()" style="min-width: 140px; justify-content: center; padding: 12px 24px;">
+          <i class="fa-solid fa-check"></i> Close
+        </button>
       </div>
     </div>
   </div>
@@ -6789,39 +6825,53 @@
 
 
     // -------------------------------------------------------------
-    // REGISTRATION MODAL LOGIC + CONFETTI TRIGGER
+    // REGISTRATION CLOSED MODAL LOGIC
+    // -------------------------------------------------------------
+    function openRegistrationClosedModal() {
+      const modal = document.getElementById('registrationClosedModal');
+      if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeRegistrationClosedModal() {
+      const modal = document.getElementById('registrationClosedModal');
+      if (modal && modal.classList.contains('active')) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // -------------------------------------------------------------
+    // REGISTRATION MODAL LOGIC (REGISTRATION STOPPED & CLOSED)
     // -------------------------------------------------------------
     function openRegisterModal() {
-      const modal = document.getElementById('registerModal');
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-      handleEventSelectionChange();
+      openRegistrationClosedModal();
+      try {
+        alert("Times up you cant register now");
+      } catch (err) {
+        console.warn(err);
+      }
     }
 
     function openRegisterForEvent(eventId) {
-      const event = eventsData.find(e => e.id === eventId);
-      if (event && event.noRegisterForm) {
-        if (event.coordinators && event.coordinators[0]) {
-          window.location.href = `tel:${event.coordinators[0].phoneRaw}`;
-        }
-        return;
-      }
       openRegisterModal();
-      const select = document.getElementById('eventSelect');
-      select.value = eventId;
-      handleEventSelectionChange();
     }
 
     function closeRegisterModal() {
       const modal = document.getElementById('registerModal');
-      modal.classList.remove('active');
-      document.body.style.overflow = '';
+      if (modal && modal.classList.contains('active')) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
     }
 
     function closeModalOnBackdrop(e, modalId) {
       if (e.target.id === modalId) {
         if (modalId === 'rulesModal') closeRulesModal();
         if (modalId === 'registerModal') closeRegisterModal();
+        if (modalId === 'registrationClosedModal') closeRegistrationClosedModal();
       }
     }
 
@@ -6890,6 +6940,12 @@
     const GOOGLE_SHEETS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxRGYUj04rvaQeBA9iAk878Upr6Xd8AQB9a9vwiRsItySnhxJ0Tv54C5lnAVd9r388pCg/exec";
 
     async function handleRegistration(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      openRegisterModal();
+      return false;
+    }
+
+    async function _legacyHandleRegistration(e) {
       e.preventDefault();
       const submitBtn = e.target.querySelector('button[type="submit"]');
       const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
